@@ -6,7 +6,7 @@
 //
 
 #include <iostream>
-#include <string>
+#include <string.h> //je devais rajouter ca pour que le memset fonctionne sur linux
 #include <limits.h>
 #include <cmath>
 #include <vector>
@@ -95,7 +95,7 @@ int main() {
         printf("\n");
     }
 
-    
+
     //4.-) Debut du code
 
     //________________________________________________________ Elements surrounding points__________________________________________
@@ -254,13 +254,13 @@ int main() {
     int face2el[NFACE][2];
     memset(face2el, -1, sizeof face2el);
     int faceCount=0;
-    
+
     // esuel[0][2]=0 ;//weird cette valeur donnait -06785434??
 
     //Declaration des variables utiles pour la creation de esuel
     int nnofa=2;
     int lhelp[nnofa];
-    
+
     int jelem;
     int nnofj;
     int icoun;
@@ -268,7 +268,7 @@ int main() {
     //Creation de lpofa une matrice (ou liste) des points pour chaque face, specifique au type d'element, independant au maillage --> peut etre cree d'avance
     int lpofa[NFAEL][nnofa];
     memset(lpofa, 0, sizeof lpofa);
-    
+
     lpofa[0][0]=1;
     lpofa[0][1]=2;
     lpofa[1][0]=2;
@@ -283,7 +283,7 @@ int main() {
     for (int i=0;i<NFAEL;++i) {
         lnofa[i]=nnofa;
     }
-    
+
     // Code ESUEL________________________
 
 
@@ -330,7 +330,7 @@ int main() {
         }
         printf("\n");
     }
-    
+
     //Test point 5
     indice=5;
     //cout << "Les points qui entourent le point " << indice << " debutent par l'indice " << esuel[][indice-1] << " et terminent par l'indice " << esup2[indice]-1 << " dans le vecteur esup1." << endl;
@@ -348,4 +348,12 @@ int main() {
         printf("%2d ", esuel[indice-1][i]);
     }
     printf("\n\n");
+
+
+
+
+
+
+
+
 }

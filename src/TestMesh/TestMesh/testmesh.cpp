@@ -349,7 +349,110 @@ int main() {
     }
     printf("\n\n");
 
+    //---------------partie cellules fantomes necessite la fin de la connectivite pour marcher-----------------------
+    // il va rester a passer dans la connectivite face2node pour mettre a jour les ghosts cell2nodeStart
+    // j'ai pris le code de abraham et olivier en attendant, mathieu a fait differement du livre et je comprends pas
+    // comment implementer la construction de la matrice inpoed (pour les edges)
+    //a la place je vais essayer de comprendre leur code.
 
+    // // Parcours de esuel pour calculer le nombre d'elements au total
+  	// int elemCount = NELEM;
+  	// int nElemTot;
+  	// int nGhostCells;
+    //
+  	// for (int i = 0; i < esuelStart[NELEM]; ++i) {
+  	// 	if (esuel[i] == -1) {
+  	// 		esuel[i] = elemCount;
+  	// 		elemCount += 1;
+  	// 	}
+  	// }
+  	// nElemTot = elemCount;
+  	// nGhostCells = nElemTot - NELEM;
+    //
+    //
+  	// int nIntFaces = faceCount;// Nombre de faces interne
+  	// int nFaces;               // Nombre total de nFaces
+  	// int nBondFaces;           // Nombre de faces frontieres
+    //
+    //
+  	// // Parcours de fsuel pour calculer le nombre de faces au total
+    //
+  	// for (int i = 0; i < esuelStart[NELEM]; ++i) {
+  	// 	if (fsuel[i] == -1) {
+  	// 		fsuel[i] = faceCount;
+  	// 		faceCount += 1;
+  	// 	}
+  	// }
+    //
+  	// nFaces = faceCount;
+  	// nBondFaces = nFaces - nIntFaces;
+    //
+  	// // Initializing the face2element connectivity
+  	// int condition;
+  	// int condition2;
+  	// int condition3;
+  	// int compteur;
+  	// int i;
+  	// int k;
+  	// int indiceFace[2] = {0};
+  	// int elemi;
+    //
+  	// for (int faceI = nIntFaces; faceI < nFaces; ++faceI) {//Looping over the faces
+  	// 	compteur = 0;
+  	// 	condition = 1;
+  	// 	i = 0;
+  	// 	while (condition) {
+  	// 		if (fsuel[i] == faceI) {
+  	// 			indiceFace[compteur] = i;
+  	// 			compteur += 1;
+  	// 		}
+  	// 		if (compteur == 2) {
+  	// 			condition = 0;
+  	// 		} else if (compteur == 1 && i > fsuelStart[NELEM]) {
+  	// 			indiceFace[compteur] = fsuelStart[NELEM];
+  	// 			condition = 0;
+  	// 		} else {
+  	// 			i += 1;
+  	// 		}
+  	// 	}
+  	// 	condition2 = 1;
+  	// 	j = 0;
+  	// 	while (condition2) {
+  	// 		if (fsuelStart[j] <= indiceFace[0] && fsuelStart[j + 1] > indiceFace[0]) {
+  	// 			elemi = j;
+  	// 			condition2 = 0;
+  	// 		} else {
+  	// 			j += 1;
+  	// 		}
+  	// 	}
+  	// 	condition3 = 1;
+  	// 	k = 0;
+  	// 	while (condition3) {
+  	// 		if (fsuelStart[k] <= indiceFace[1] && fsuelStart[k + 1] > indiceFace[1]) {
+  	// 			elemj = k;
+  	// 			condition3 = 0;
+  	// 		} else {
+  	// 			k += 1;
+  	// 		}
+    //
+  	// 		if (k == NELEM) {
+  	// 			elemj = -1;
+  	// 			condition3 = 0;
+  	// 		}
+  	// 	}
+  	// 	face2el.push_back (elemi);
+  	// 	face2el.push_back (elemj);
+  	// }
+    //
+    //
+  	// // Passage dans face2el pour mettre a jour les ghost cells
+  	// int countGhostcells = NELEM;
+  	// for (int i = 0; i < 2 * nFaces; ++i) {
+  	// 	if (face2el[i] == -1) {
+  	// 		face2el[i] = countGhostcells;
+  	// 		countGhostcells += 1;
+  	// 	}
+  	// }
 
 
 

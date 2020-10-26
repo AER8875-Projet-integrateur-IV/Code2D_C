@@ -102,6 +102,12 @@ int main() {
     printf("______________________Debut code ESUP________________________\n\n" );
     //Generer esup1 et esup2
     //Element Pass 1
+    
+    int esupStart[NPOIN+1];
+    memset( esupStart, 0, (NPOIN+1)*sizeof(int) );
+    int numEleSurPoi[NPOIN];
+    memset( numEleSurPoi, 0, (NPOIN+1)*sizeof(int) );
+    
     for (int i=0;i<NELEM;++i){
         for (int j=0;j<NNODE;++j){
             ipoil=CONNEC[i][j];
@@ -330,6 +336,31 @@ int main() {
         }
         printf("\n");
     }
+    int numNodeElem[NPOIN];
+    memset( numNodeElem, 0, NPOIN*sizeof(int) );
+    for (int i=0;i<NPOIN;++i){
+        numNodeElem[i]=3;
+    int sumTot = 0;
+    for(int i=0;i<NPOIN;++i){
+        sumTot+=numNodeElem[i];
+    }
+    int cell2nodeStart[NPOIN+1];
+    memset( cell2nodeStart, 0, (NELEM+1)*sizeof(int) );
+        int cell2node[sumTot];
+        memset( cell2node, 0, sumTot*sizeof(int) );
+
+            for (int i=0;i<NELEM;++i){
+                cell2nodeStart[i+1]=cell2nodeStart[i]+numNodeElem[i];
+                for (int j=0;j<numNodeElem[i];++j){
+                    cell2node[cell2nodeStart[i]+j]=CONNEC[i][j];
+                }
+            }
+            int numNodes=0;
+            for (int i=0;i<cell2nodeStart[NPOIN];++i){
+                if (cell2node[i]+1>numNodes){
+                    numNodes=cell2node[i]+1;
+                }
+            }
 
     //Test point 5
     indice=5;
@@ -342,121 +373,403 @@ int main() {
 
 
     //Test point 9
-    indice=11;
+    indice=9;
     cout << "Les éléments entourant l'élément " << indice << " sont : " ;
     for (int i=0;i<NFAEL;++i){
         printf("%2d ", esuel[indice-1][i]);
     }
     printf("\n\n");
 
-    //---------------partie cellules fantomes necessite la fin de la connectivite pour marcher-----------------------
-    // il va rester a passer dans la connectivite face2node pour mettre a jour les ghosts cell2nodeStart
-    // j'ai pris le code de abraham et olivier en attendant, mathieu a fait differement du livre et je comprends pas
-    // comment implementer la construction de la matrice inpoed (pour les edges)
-    //a la place je vais essayer de comprendre leur code.
+    // Initializing the node to element linked list connectivity
+    int esup[sumTot];
+    memset( esup, 0, sumTot*sizeof(int) );
+        // Array to save the increment
+        int store[NPOIN];
+        memset( store, 0, NPOIN*sizeof(int) );
 
-    // // Parcours de esuel pour calculer le nombre d'elements au total
-  	// int elemCount = NELEM;
-  	// int nElemTot;
-  	// int nGhostCells;
-    //
-  	// for (int i = 0; i < esuelStart[NELEM]; ++i) {
-  	// 	if (esuel[i] == -1) {
-  	// 		esuel[i] = elemCount;
-  	// 		elemCount += 1;
-  	// 	}
-  	// }
-  	// nElemTot = elemCount;
-  	// nGhostCells = nElemTot - NELEM;
-    //
-    //
-  	// int nIntFaces = faceCount;// Nombre de faces interne
-  	// int nFaces;               // Nombre total de nFaces
-  	// int nBondFaces;           // Nombre de faces frontieres
-    //
-    //
-  	// // Parcours de fsuel pour calculer le nombre de faces au total
-    //
-  	// for (int i = 0; i < esuelStart[NELEM]; ++i) {
-  	// 	if (fsuel[i] == -1) {
-  	// 		fsuel[i] = faceCount;
-  	// 		faceCount += 1;
-  	// 	}
-  	// }
-    //
-  	// nFaces = faceCount;
-  	// nBondFaces = nFaces - nIntFaces;
-    //
-  	// // Initializing the face2element connectivity
-  	// int condition;
-  	// int condition2;
-  	// int condition3;
-  	// int compteur;
-  	// int i;
-  	// int k;
-  	// int indiceFace[2] = {0};
-  	// int elemi;
-    //
-  	// for (int faceI = nIntFaces; faceI < nFaces; ++faceI) {//Looping over the faces
-  	// 	compteur = 0;
-  	// 	condition = 1;
-  	// 	i = 0;
-  	// 	while (condition) {
-  	// 		if (fsuel[i] == faceI) {
-  	// 			indiceFace[compteur] = i;
-  	// 			compteur += 1;
-  	// 		}
-  	// 		if (compteur == 2) {
-  	// 			condition = 0;
-  	// 		} else if (compteur == 1 && i > fsuelStart[NELEM]) {
-  	// 			indiceFace[compteur] = fsuelStart[NELEM];
-  	// 			condition = 0;
-  	// 		} else {
-  	// 			i += 1;
-  	// 		}
-  	// 	}
-  	// 	condition2 = 1;
-  	// 	j = 0;
-  	// 	while (condition2) {
-  	// 		if (fsuelStart[j] <= indiceFace[0] && fsuelStart[j + 1] > indiceFace[0]) {
-  	// 			elemi = j;
-  	// 			condition2 = 0;
-  	// 		} else {
-  	// 			j += 1;
-  	// 		}
-  	// 	}
-  	// 	condition3 = 1;
-  	// 	k = 0;
-  	// 	while (condition3) {
-  	// 		if (fsuelStart[k] <= indiceFace[1] && fsuelStart[k + 1] > indiceFace[1]) {
-  	// 			elemj = k;
-  	// 			condition3 = 0;
-  	// 		} else {
-  	// 			k += 1;
-  	// 		}
-    //
-  	// 		if (k == NELEM) {
-  	// 			elemj = -1;
-  	// 			condition3 = 0;
-  	// 		}
-  	// 	}
-  	// 	face2el.push_back (elemi);
-  	// 	face2el.push_back (elemj);
-  	// }
-    //
-    //
-  	// // Passage dans face2el pour mettre a jour les ghost cells
-  	// int countGhostcells = NELEM;
-  	// for (int i = 0; i < 2 * nFaces; ++i) {
-  	// 	if (face2el[i] == -1) {
-  	// 		face2el[i] = countGhostcells;
-  	// 		countGhostcells += 1;
-  	// 	}
-  	// }
+        for (int elemi=0;elemi<NELEM;++elemi){
+            int startI=cell2nodeStart[elemi];
+            int endI=cell2nodeStart[elemi+1];
+
+            for (int i=startI;i<endI;++i){
+                int nodeI=cell2node[i];
+                // Fetching the index for the connectivity list
+                int j=esupStart[nodeI]+store[nodeI];
+                // Adding the element index for nodeI
+                esup[j] = elemi;
+                store[nodeI]+=1;
+            }
+        }
 
 
+    //___________________________________________ Elements surrounding Elements____________________________________________
+        printf("_________________Debut code FSUEL________________________\n\n");
+        // Element 2 element start offset linked list
+        int esuelStart[NELEM+1];
+        memset( esuelStart, 0, (NELEM+1)*sizeof(int) );
+        int fsuelStart[NELEM+1];
+        memset( fsuelStart, 0, (NELEM+1)*sizeof(int) );
+
+        // Counting the number of faces per elements
+        int nLocalFaces;
+        int startI;
+        int endI;
+        int nodeI;
+        memset( cell2nodeStart, 0, (NELEM+1)*sizeof(int) );
+        int numNodeElem[NPOIN];
+        memset( numNodeElem, 0, NPOIN*sizeof(int) );
+        for (int i=0;i<NPOIN;++i){
+            numNodeElem[i]=3;
+        }
+        for(int i=0;i<NPOIN;++i){
+            sumTot+=numNodeElem[i];
+        }
+    
+        for (int elemi=0;elemi<NELEM;++elemi){
+            startI = cell2nodeStart[elemi];
+            endI = cell2nodeStart[elemi+1];
+            nLocalFaces = endI-startI;
+            esuelStart[elemi+1]+=nLocalFaces;
+        }
+
+        // Final setup of the element 2 element start offset linked list
+        for (int i=1;i<NELEM+1;++i){
+            esuelStart[i]+=esuelStart[i-1];
+        }
+        for (int i = 0; i < NELEM + 1; ++i) {
+            fsuelStart[i] = esuelStart[i];
+        }
+
+        // Initializing the element 2 element linked list to -1 using fill_n from <algorithm>
+        int esuel[esuelStart[NELEM]];
+        std::fill_n(esuel,esuelStart[NELEM],-1);
+        // Initializing the face surrounding element linked list to -1
+        int fsuel[esuelStart[NELEM]];
+        std::fill_n(fsuel, esuelStart[NELEM], -1);
+
+        // Array to save information to speedup the process
+        int nNodesForFace=2; // In 2D a face necesseraly has 2 nodes. this needs to be changed for a 3D mesh
+        //int lhelp[nNodesForFace]={0};
+        int lpoint[NPOIN];
+        memset( lpoint, 0, NPOIN*sizeof(int) );
+        int ipoint;
+        int elemStart;
+        int elemEnd;
+        int elemj;
+        int startJ;
+        int endJ;
+        int nNodesForFaceI;
+        int nNodesForFaceJ;
+        int count;
+        int pointIndex;
+        int nLocaleFacesJ;
+        //int faceCount = 0;
+
+        std::vector<int> face2node;
+        std::vector<int> face2el;
+
+        // Looping over all elements in the mesh
+        for (int elemi=0;elemi<NELEM;++elemi)
+        {
+            startI = cell2nodeStart[elemi];
+            endI = cell2nodeStart[elemi+1];
+            nLocalFaces = endI - startI;
 
 
+            // Looping over the local faces of elemi
+            for (int faceI=0;faceI<nLocalFaces;++faceI){
+                // In 2D, a face has 2 nodes
+                nNodesForFaceI = nNodesForFace;// to be changed for 3D nNodesForFace to be an array
 
+                //Saving the nodes of the face to find
+                lhelp[0] = cell2node[startI+faceI];
+                if (faceI == nLocalFaces-1){
+                    lhelp[1] = cell2node[startI];
+                }
+                else {
+                    lhelp[1] = cell2node[startI+faceI+1];
+                }
+
+                // Storing the nodes of the face
+                lpoint[lhelp[0]] = 1;
+                lpoint[lhelp[1]] = 1;
+
+                // Choosing the first node to loop over its Elements
+                ipoint = lhelp[0];
+
+                elemStart = esupStart[ipoint];
+                elemEnd = esupStart[ipoint+1];
+
+
+                // Looping over the elements connected to point ipoint
+                for (int j=elemStart;j<elemEnd;++j){
+                    elemj = esup[j];
+
+                    if (elemj != elemi){
+                        startJ = cell2nodeStart[elemj];
+                        endJ = cell2nodeStart[elemj+1];
+                        nLocaleFacesJ = endJ - startJ;
+
+                        // Looping over the faces of elementJ
+                        for (int facej=0;facej<nLocaleFacesJ;++facej){
+                            nNodesForFaceJ = 2; // Dont forget to change to an array in 3D! nNodesforFace[elemj]
+
+                            if (nNodesForFaceI == nNodesForFaceJ){
+                                count = 0;
+                                for (int localNodeJ=0;localNodeJ<nNodesForFaceJ;++localNodeJ){
+                                    pointIndex = startJ+facej+localNodeJ;
+
+                                    if (facej == (nLocaleFacesJ-1) && localNodeJ == (nNodesForFaceJ-1)){
+                                        pointIndex = startJ;
+
+                                    }
+                                    count += lpoint[cell2node[pointIndex]];
+                                // If the number of matching nodes is equal to the number of nodes in faceI, faceJ is a match with faceI
+                                if (count == nNodesForFaceI){
+                                    //Adding elementJ to the connectivity of elementI
+                                    esuel[esuelStart[elemi]+faceI]=elemj;
+
+                                    // Checking if the face has already been added
+                                    if (esuel[esuelStart[elemj] + facej] == elemi) {
+                                        fsuel[esuelStart[elemi] + faceI] = fsuel[esuelStart[elemj] + facej];
+                                    }
+                                    // Adding a new face
+                                    else {
+                                        fsuel[esuelStart[elemi] + faceI] = faceCount;
+                                        fsuel[esuelStart[elemj] + facej] = faceCount;
+                                        face2el.push_back (elemi);
+                                        face2el.push_back (elemj);
+                                        for (int i=0;i<nNodesForFaceI;++i){
+                                            face2node.push_back (lhelp[i]);
+                                        }
+                                        faceCount += 1;
+                                    }
+                                }
+
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+
+                for (int i=0;i<nNodesForFaceI;++i){
+                    lpoint[lhelp[i]]=0;
+                }
+            }
+        }
+
+
+        printf("face2node = \n");
+        for (int i = 0; i < face2node.size(); ++i) {
+            printf("%2d ", face2node[i]);
+        }
+        printf("\n\n");
+
+        // Parcours de esuel pour calculer le nombre d'elements au total
+        int elemCount = NELEM;
+        int nElemTot;
+        int nGhostCells;
+
+        for (int i = 0; i < esuelStart[NELEM]; ++i) {
+            if (esuel[i] == -1) {
+                esuel[i] = elemCount;
+                elemCount += 1;
+            }
+        }
+        nElemTot = elemCount;
+        nGhostCells = nElemTot - NELEM;
+
+
+        int nIntFaces = faceCount;// Nombre de faces interne
+        int nFaces;               // Nombre total de nFaces
+        int nBondFaces;           // Nombre de faces frontieres
+
+
+        // Parcours de fsuel pour calculer le nombre de faces au total
+
+        for (int i = 0; i < esuelStart[NELEM]; ++i) {
+            if (fsuel[i] == -1) {
+                fsuel[i] = faceCount;
+                faceCount += 1;
+            }
+        }
+
+        nFaces = faceCount;
+        nBondFaces = nFaces - nIntFaces;
+
+        // Initializing the face2element connectivity
+        int condition;
+        int condition2;
+        int condition3;
+        int compteur;
+        int k;
+        int indiceFace[2] = {0};
+        int elemi;
+
+        for (int faceI = nIntFaces; faceI < nFaces; ++faceI) {//Looping over the faces
+            compteur = 0;
+            condition = 1;
+            i = 0;
+            while (condition) {
+                if (fsuel[i] == faceI) {
+                    indiceFace[compteur] = i;
+                    compteur += 1;
+                }
+                if (compteur == 2) {
+                    condition = 0;
+                } else if (compteur == 1 && i > fsuelStart[NELEM]) {
+                    indiceFace[compteur] = fsuelStart[NELEM];
+                    condition = 0;
+                } else {
+                    i += 1;
+                }
+            }
+            condition2 = 1;
+            int j = 0;
+            while (condition2) {
+                if (fsuelStart[j] <= indiceFace[0] && fsuelStart[j + 1] > indiceFace[0]) {
+                    elemi = j;
+                    condition2 = 0;
+                } else {
+                    j += 1;
+                }
+            }
+            condition3 = 1;
+            k = 0;
+            while (condition3) {
+                if (fsuelStart[k] <= indiceFace[1] && fsuelStart[k + 1] > indiceFace[1]) {
+                    elemj = k;
+                    condition3 = 0;
+                } else {
+                    k += 1;
+                }
+
+                if (k == NELEM) {
+                    elemj = -1;
+                    condition3 = 0;
+                }
+            }
+            face2el.push_back (elemi);
+            face2el.push_back (elemj);
+        }
+
+
+        // Passage dans face2el pour mettre a jour les ghost cells
+        int countGhostcells = NELEM;
+        for (int i = 0; i < 2 * nFaces; ++i) {
+            if (face2el[i] == -1) {
+                face2el[i] = countGhostcells;
+                countGhostcells += 1;
+            }
+        }
+
+        // Passage dans face2node pour mettre a jour les ghost cells
+        countGhostcells = NELEM;
+        int trouve;
+        //int depasse=0;
+        for (int elemi=0;elemi<NELEM;++elemi){
+            startI=cell2nodeStart[elemi];
+            endI=cell2nodeStart[elemi+1];
+            nLocalFaces = endI - startI;
+
+            for (int faceI=0;faceI<nLocalFaces;++faceI){// En 2D, cette ligne est vraie,
+            // en 3D, ce n'est pas vrai que le nombre de noeuds dun element correspond
+            //au nombre de faces, il faut donc penser a creer, en plus de numNodeElem,
+            // un vecteur qui va stocker le nombre de faces par element!!
+            // for (int faceI=0;faceI<numFaceElem[elemi])...
+                lhelp[0]=cell2node[startI+faceI];
+                if (faceI == nLocalFaces-1){
+                    lhelp[1] = cell2node[startI];
+                }
+                else {
+                    lhelp[1] = cell2node[startI+faceI+1];
+                }
+                printf(" lhelp[0]= %2d\n", lhelp[0]);
+                printf(" lhelp[1]= %2d\n", lhelp[1]);
+
+                trouve=0;
+                for (int i=0;i<face2node.size()/2;++i){
+                    if ((face2node[i*nNodesForFace] == lhelp[0] && face2node[i*nNodesForFace+1] == lhelp[1]) || (face2node[i*nNodesForFace] == lhelp[1] && face2node[i*nNodesForFace+1] == lhelp[0])){
+                        trouve=1;
+                    }
+                }
+
+                if (!trouve){
+                    face2node.push_back (lhelp[0]);
+                    face2node.push_back (lhelp[1]);
+                }
+            }
+        }
+
+
+        //___________________________________________________________________________
+        // Affichage des linked lists
+
+        printf("esuelStart = \n");
+        for (int i=0;i<NELEM+1;++i){
+            printf("%2d ",esuelStart[i] );
+        }
+        printf("\n\n");
+
+        printf("esuel = \n");
+        for (int i=0;i<esuelStart[NELEM];++i){
+            printf("%2d ",esuel[i] );
+        }
+        printf("\n\n");
+
+        printf("Nombre d'elements internes = %2d\n", NELEM);
+        printf("Nombre d'elements total = %2d\n", nElemTot);
+        printf("Nombre de cellules fantomes = %2d\n", nGhostCells);
+        printf("\n\n");
+
+        printf("fsuelStart = \n");
+        for (int i = 0; i < NELEM + 1; ++i) {
+            printf("%2d ", fsuelStart[i]);
+        }
+        printf("\n\n");
+
+        printf("fsuel = \n");
+        for (int i = 0; i < esuelStart[NELEM]; ++i) {
+            printf("%2d ", fsuel[i]);
+        }
+        printf("\n\n");
+
+        printf("Nombre de faces internes = %2d\n", nIntFaces);
+        printf("Nombre de faces  = %2d\n", nFaces);
+        printf("Nombre de faces frontieres = %2d\n", nBondFaces);
+        printf("\n\n");
+
+        printf("face2el = \n");
+        for (int i = 0; i < 2 * nFaces; ++i) {
+            printf("%2d ", face2el[i]);
+        }
+        printf("\n\n");
+
+        printf("face2node = \n");
+        for (int i = 0; i < 2 * nFaces; ++i) {
+            printf("%2d ", face2node[i]);
+        }
+        printf("\n\n");
+    }
+
+    //Test point 5
+    indice=5;
+    //cout << "Les points qui entourent le point " << indice << " debutent par l'indice " << esuel[][indice-1] << " et terminent par l'indice " << esup2[indice]-1 << " dans le vecteur esup1." << endl;
+    cout << "Les éléments entourant l'élément " << indice << " sont : " ;
+    for (int i=0;i<NFAEL;++i){
+        printf("%2d ", fsuel[indice-1][i]);
+    }
+    printf("\n\n");
+
+
+    //Test point 9
+    indice=9;
+    cout << "Les éléments entourant l'élément " << indice << " sont : " ;
+    for (int i=0;i<NFAEL;++i){
+        printf("%2d ", fsuel[indice-1][i]);
+    }
+    printf("\n\n");
 
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D14F251F253885C300A4245A /* testmesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14F251D253885C300A4245A /* testmesh.cpp */; };
+		D14F25242545B01200A4245A /* connectivity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14F25222545B01200A4245A /* connectivity.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +27,8 @@
 		D14F25122538846E00A4245A /* TestMesh */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestMesh; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14F251D253885C300A4245A /* testmesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testmesh.cpp; sourceTree = "<group>"; };
 		D14F251E253885C300A4245A /* testmesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testmesh.hpp; sourceTree = "<group>"; };
+		D14F25222545B01200A4245A /* connectivity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = connectivity.cpp; sourceTree = "<group>"; };
+		D14F25232545B01200A4245A /* connectivity.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connectivity.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,8 @@
 			children = (
 				D14F251D253885C300A4245A /* testmesh.cpp */,
 				D14F251E253885C300A4245A /* testmesh.hpp */,
+				D14F25222545B01200A4245A /* connectivity.cpp */,
+				D14F25232545B01200A4245A /* connectivity.hpp */,
 			);
 			path = TestMesh;
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D14F25242545B01200A4245A /* connectivity.cpp in Sources */,
 				D14F251F253885C300A4245A /* testmesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

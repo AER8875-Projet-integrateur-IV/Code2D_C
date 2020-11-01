@@ -1,10 +1,5 @@
 // reading a text file
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <vector>
-using namespace std;
+#include "MeshReader.hpp"
 
 string NumberFinder(string line) {
   size_t i = 0;
@@ -145,7 +140,7 @@ void MeshReader () {
 
 
 
-int main(int argc, char const *argv[]) {
-  MeshReader();
-  return 0;
-}
+// int main(int argc, char const *argv[]) {
+//   MeshReader();
+//   return 0;
+// }

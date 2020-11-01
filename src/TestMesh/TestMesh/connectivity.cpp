@@ -11,29 +11,48 @@
 #include "MeshReader.cpp"
 
 using namespace std;
+//global VARIABLES
+
 
 int main() {
 
-    int nPoints = 15;
-    int nElements = 13;
-    int nFaces = 27;
+    int nFaces = 60; // il reste a implement un algo pour compter les faces
 
-    int cell2nodeStart [] = {0,4,8,12,16,19,22,25,28,31,34,37,40,43};
-    int cell2node [] = {0,1,6,5,1,2,7,6,2,3,8,7,3,4,9,8,8,9,10,13,11,12,8,10,11,7,11,13,6,7,13,14,6,13,14,13,12,5,6,14,7,8,11};
+
     int startI;
     int endI;
     int nodeI;
 
     MeshReader();
+    cout << "reading done!" << '\n';
+    cout << "NDIME =" <<NDIME << '\n';
+    cout << "NELEM = " << NELEM << '\n';
+    cout << "Npoint = " <<NPOIN << '\n';
+
+    cout << "cell2nodeStart: " << '\n';
+    for (int i=0;i<NELEM+1;i++) {
+      cout << cell2nodeStart[i] << " ";
+    }
+    cout << '\n';
+    cout << "cell2node: " << '\n';
+    for (int i=0;i<NELEM+1;i++) {
+      for (int j = 0; j<cell2nodeStart[i+1]-cell2nodeStart[i]; j++) {
+        cout << cell2node[j+cell2nodeStart[i]] << "  ";
+      }
+      cout << '\n';
+    }
+
+
+
 
     vector<int> esupStart;
-    for (int i=0;i<nPoints+1;i++) {
+    for (int i=0;i<NPOIN+1;i++) {
         esupStart.push_back(0);
     }
 
     cout << "Computing node to element connectivity...";
 
-    for (int elementI=0; elementI<nElements;elementI++) {
+    for (int elementI=0; elementI<NELEM;elementI++) {
         startI = cell2nodeStart[elementI];
         endI = cell2nodeStart[elementI+1];
 
@@ -43,49 +62,56 @@ int main() {
         }
     }
 
-    for (int i=1; i<nPoints+1;i++) {
+    for (int i=1; i<NPOIN+1;i++) {
         esupStart.at(i) += esupStart[i-1];
     }
+  
+
 
     vector<int> esup;
-    for (int i=0;i<esupStart.back();i++)
-        esup.push_back(0);
-    vector<int> store;
-    for (int i=0;i<nPoints;i++)
-        store.push_back(0);
+    for (int i=0;i<esupStart.back();i++){
+      esup.push_back(0);
+    }
 
-    for (int elementI=0; elementI<nElements;elementI++) {
+    vector<int> store;
+    for (int i=0;i<NPOIN;i++){
+      store.push_back(0);
+    }
+
+
+    for (int elementI=0; elementI<NELEM;elementI++) {
         startI = cell2nodeStart[elementI];
         endI = cell2nodeStart[elementI+1];
 
          for (int i=startI;i <endI;i++) {
             nodeI = cell2node[i];
             int j = esupStart.at(nodeI) + store.at(nodeI);
-            cout <<j<<" ";
             esup.at(j) = elementI;
             store.at(nodeI) += 1;
         }
     }
+
     cout<<"Computing node to element connectivity...Done!\n";
     cout<<"Node to element = " ;
-    for (int i=0;i<sizeof(esup);i++) cout<< esup.at(i)<< " ";
+    for (int i=0;i<esup.size();i++) cout<< esup.at(i)<< " ";
+    cout << "size = " << esup.size();
     cout<<"\n==============================================\n";
 
     cout<<"Computing element 2 element connectivity...";
 
     vector<int> esuelStart;
-    for(int i=0;i<nElements+1;i++){
+    for(int i=0;i<NELEM+1;i++){
         esuelStart.push_back(0);
     }
 
-    for (int elementI=0; elementI<nElements; elementI++) {
+    for (int elementI=0; elementI<NELEM; elementI++) {
         startI = cell2nodeStart[elementI];
         endI = cell2nodeStart[elementI+1];
         int nLocalFaces = endI - startI;
         esuelStart.at(elementI+1) += nLocalFaces;
     }
 
-    for (int i=1; i<nElements+1;i++) {
+    for (int i=1; i<NELEM+1;i++) {
         esuelStart.at(i) += esuelStart[i-1];
     }
 
@@ -104,9 +130,9 @@ int main() {
     int faceCount = 0;
 
     int lhelp [2];
-    int lpoint [nPoints];
+    int lpoint [NPOIN];
 
-    for (int elementI=0; elementI<nElements; elementI++) {
+    for (int elementI=0; elementI<NELEM; elementI++) {
         startI = cell2nodeStart[elementI];
         endI = cell2nodeStart[elementI+1];
         int nLocalFaces = endI - startI;
@@ -179,19 +205,19 @@ int main() {
     }
     cout<<"Computing element 2 element connectivity...Done!\n";
     cout<<"Element to element = ";
-    for (int i=0;i<sizeof(esuel);i++) cout<<esuel.at(i) << " ";
+    for (int i=0;i<esuel.size();i++) cout<<esuel.at(i) << " ";
     cout <<"\n";
     cout<<"Face to element = ";
-    for (int i=0;i<sizeof(fsuel);i++) cout<<fsuel.at(i) << " ";
+    for (int i=0;i<fsuel.size();i++) cout<<fsuel.at(i) << " ";
     cout<< "\n";
 
     // Parcours de esuel pour calculer le nombre d'elements au total
-    int elemCount = nElements;
-        faceCount = nFaces;
+    int elemCount = NELEM;
+    faceCount = nFaces;
     int nElemTot;
     int nGhostCells;
 
-    for (int i = 0; i < esuelStart[nElements]; ++i) {
+    for (int i = 0; i < esuelStart[NELEM]; ++i) {
         if (esuel[i] == -1) {
             esuel[i] = elemCount;
             elemCount += 1;
@@ -202,7 +228,7 @@ int main() {
         }
     }
     nElemTot = elemCount;
-    nGhostCells = nElemTot - nElements;
+    nGhostCells = nElemTot - NELEM;
 
 
     //int nFaceInt = faceCount;// Nombre de faces interne
@@ -211,11 +237,23 @@ int main() {
 
     // Parcours de fsuel pour calculer le nombre de faces au total
     cout<<"Element to element = ";
-    for (int i=0;i<sizeof(esuel);i++) cout<<esuel.at(i) << " ";
+    for (int i=0;i<esuel.size();i++) cout<<esuel.at(i) << " ";
     cout <<"\n";
     cout<<"Face to element = ";
-    for (int i=0;i<sizeof(fsuel);i++) cout<<fsuel.at(i) << " ";
+    for (int i=0;i<fsuel.size();i++) cout<<fsuel.at(i) << " ";
     cout<< "\n";
+
+    for (int i = 0; i<NPOIN; i++)
+    {
+      for (int j = 0; j<NDIME; j++)
+      {
+        cout << coord[i][j] << "  ";
+      }
+      cout << '\n';
+    }
+
+
+
 
 
 

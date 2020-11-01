@@ -1,6 +1,14 @@
 // reading a text file
 #include "MeshReader.hpp"
 
+//global VARIABLES
+vector<vector<double>> coord;
+int NDIME;
+int NPOIN;
+int NELEM;
+vector<int> cell2node;
+vector<int> cell2nodeStart = {0};
+
 string NumberFinder(string line) {
   size_t i = 0;
   while (!isdigit(line[i]) && i < line.length())
@@ -15,7 +23,7 @@ string NumberFinder(string line) {
 
 void MeshReader () {
   string line;
-  ifstream myfile ("example.txt");
+  ifstream myfile ("square_5x5.su2");
   if (myfile.is_open())
   {
     getline(myfile,line); //lit une premiere ligne
@@ -23,20 +31,18 @@ void MeshReader () {
     {
       getline(myfile,line);
     }
-    cout << line << '\n';
+
     line = NumberFinder(line);
-    int NDIME = stoi(line);
-    cout << NDIME << '\n';
+    NDIME = stoi(line);
 
     getline(myfile,line);
     while (line[0] == '%') //skippe les lignes en commentaires
     {
       getline(myfile,line);
     }
-    cout << line  << '\n';
+
     line = NumberFinder(line); // Find the number of elements
-    int NELEM = stoi(line);
-    cout << NELEM << '\n';
+    NELEM = stoi(line);
 
     //getline(myfile, line); //lit une ligne
     //stringstream ss(line); // separe la ligne en mots
@@ -45,9 +51,9 @@ void MeshReader () {
     //cout << word << '\n';
 
     vector<int> nNode;
-    vector<vector<int>> iNpoel;
 
-    iNpoel.reserve(NELEM);
+
+    cell2node.reserve(NELEM);
     for (int i = 0; i<NELEM; i++)
     {
       // Find the number of nodes for one element using the su2 convention for the number of nodes
@@ -62,15 +68,17 @@ void MeshReader () {
       if (word_2.compare("3") == 0)
       {
         nNode.push_back(2);
+        cell2nodeStart.push_back(2+cell2nodeStart[i]);
       }
       else if (word_2.compare("5") == 0)
       {
         nNode.push_back(3);
+        cell2nodeStart.push_back(3+cell2nodeStart[i]);
       }
       else if (word_2.compare("9") == 0)
       {
         nNode.push_back(4);
-
+        cell2nodeStart.push_back(4+cell2nodeStart[i]);
       }
       else
       {
@@ -78,18 +86,20 @@ void MeshReader () {
         break;
       }
 
-      // Store each node in the right line and in the right order in the iNpoel vector
+      // Store each node in the right line and in the right order in the cell2node vector
       ss_2 >> word_2;
 
-      iNpoel.push_back({});
 
       for (int j = 0; j<nNode[i]; j++)
       {
-        iNpoel[i].push_back(stoi(word_2));
+        cell2node.push_back(stoi(word_2));
         ss_2 >> word_2;
 
       }
+
+
     }
+
 
     getline(myfile,line); //lit une premiere ligne
     while (line[0] == '%') //skippe les lignes en commentaires
@@ -97,11 +107,11 @@ void MeshReader () {
       getline(myfile,line);
     }
     line = NumberFinder(line); // Find the number of elements
-    int NPOIN= stoi(line);
-    cout << NPOIN << '\n';
+    NPOIN= stoi(line);
 
 
-    vector<vector<double>> coord;
+
+
 
     coord.reserve(NPOIN);
     for (int i = 0; i<NPOIN; i++)
@@ -120,9 +130,8 @@ void MeshReader () {
         ss_2 >> word_2;
         double value = stod(word_2);
         coord[i].push_back({value});
-        cout << coord[i][j] << "  ";
+
       }
-      cout << '\n';
     }
 
 

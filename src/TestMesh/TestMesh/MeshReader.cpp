@@ -8,6 +8,11 @@ int NPOIN;
 int NELEM;
 vector<int> cell2node;
 vector<int> cell2nodeStart = {0};
+vector<int> nNodeb;
+vector<int> nElemb;
+vector<vector<vector<int>>> bCond;
+int nMark;
+
 
 string NumberFinder(string line) {
   size_t i = 0;
@@ -134,14 +139,105 @@ void MeshReader () {
       }
     }
 
+    getline(myfile,line); //lit une premiere ligne
+    while (line[0] == '%') //skippe les lignes en commentaires
+    {
+      getline(myfile,line);
+    }
+
+    stringstream ss(line);
+
+    // Store one word at a time
+    string word;
+    ss >> word;
+
+    if (word.compare("NMARK=") == 0)
+    {
+      ss >> word;
+      nMark = stoi(word);
+      bCond.resize(nMark);
+
+      // Create a loop to extract all the info on the boundary conditions
+      for (int i = 0; i<nMark; i++)
+      {
+        getline(myfile, line);
+        stringstream ss_2(line);
+
+        string word_2;
+        ss_2 >> word_2;
+
+        // Make sure that the next line is the marker_tag
+        if (word_2.compare("MARKER_TAG=") == 0)
+        {
+          getline(myfile, line);
+          stringstream ss_3(line);
+          string word_3;
+          ss_3 >> word_3;
+
+          // Find the number of elements per boundary condition
+          if (word_3.compare("MARKER_ELEMS=") == 0)
+          {
+            ss_3 >> word_3;
+            nElemb.push_back(stoi(word_3));
+          }
+          else
+          {
+            cout << "[ERROR] : Nombre d'éléments pas reconnu" << endl;
+            break;
+          }
+
+          bCond[i].resize(nElemb[i]);
+
+          // Stock the boundary point numbers
+          for (int j = 0; j<nElemb[i]; j++)
+          {
+            getline(myfile, line);
+            stringstream ss_4(line);
+            string word_4;
+
+            ss_4 >> word_4;
+
+            // Find the number of nodes per boundary element
+            if (word_4.compare("3") == 0)
+            {
+              nNodeb.push_back(2);
+            }
+            else if (word_4.compare("5") == 0)
+            {
+              nNodeb.push_back(3);
+            }
+            else if (word_4.compare("9") == 0)
+            {
+
+              nNodeb.push_back(4);
+            }
+            else
+            {
+              cout << "[ERROR] : Nombre de nodes pas reconnu" << endl;
+              break;
+            }
+
+            for (int k = 0; k<nNodeb[j]; k++)
+            {
+              ss_4 >> word_4;
+              bCond[i][j].push_back(stoi(word_4));
+            }
+          }
+        }
+        // Show error if "MARKER_TAG=" is not the next input
+        else
+        {
+          cout << "[ERROR]: Could not read file correctly. Missing 'MARKER_TAG='" << endl;
+          break;
+        }
+      }
+    }
 
 
 
-
-
-
-    myfile.close();
+  myfile.close();
   }
+
 
   else cout << "Unable to open file";
 

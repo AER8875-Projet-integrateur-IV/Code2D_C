@@ -65,7 +65,7 @@ int main() {
     for (int i=1; i<NPOIN+1;i++) {
         esupStart.at(i) += esupStart[i-1];
     }
-  
+
 
 
     vector<int> esup;
@@ -252,7 +252,15 @@ int main() {
       cout << '\n';
     }
 
-
+    for (size_t i = 0; i < nMark; i++) {
+      cout << "mark: " << i+1 << '\n';
+      for (size_t j = 0; j < nElemb[i]; j++) {
+        for (size_t k = 0; k < nNodeb[j]; k++) {
+          cout << bCond[i][j][k] << "  ";
+        }
+        cout << '\n';
+      }
+    }
 
 
 

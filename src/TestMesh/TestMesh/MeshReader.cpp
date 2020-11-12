@@ -2,7 +2,7 @@
 #include "MeshReader.hpp"
 
 //global VARIABLES
-vector<vector<double>> coord;
+vector<vector<double> > coord;
 int NDIME;
 int NPOIN;
 int NELEM;
@@ -10,7 +10,7 @@ vector<int> cell2node;
 vector<int> cell2nodeStart = {0};
 vector<int> nNodeb;
 vector<int> nElemb;
-vector<vector<vector<int>>> bCond;
+vector<vector<vector<int> > > bCond;
 int nMark;
 
 
@@ -134,7 +134,7 @@ void MeshReader () {
         string word_2;
         ss_2 >> word_2;
         double value = stod(word_2);
-        coord[i].push_back({value});
+        coord[i].push_back(value);
 
       }
     }

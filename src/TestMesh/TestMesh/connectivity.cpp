@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include "MeshReader.cpp"
+#include "Metriques.cpp"
 
 using namespace std;
 //global VARIABLES
@@ -262,9 +263,7 @@ int main() {
       }
     }
 
-
-
-
+    ResolutionMetriques();
 
     return 0;
 }

@@ -1,11 +1,11 @@
-#include "Metriques.hpp"
+#include "metrics.hpp"
 #include <limits>
 
 vector<double> area;
 vector<vector<double> > centroidVec;
 vector<vector<vector<double> > > normalVec;
 
-void ResolutionMetriques(){//vector<vector<double> > coord, int NELEM, int NDIME, vector<int> cell2node, vector<int> cell2nodeStart){
+void Metrics(){
   cout << "----- Starting Metriques Calculations -----" << endl;
 
   centroidVec.resize(NELEM);

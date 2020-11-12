@@ -1,6 +1,3 @@
-
-
-
   #ifndef Metriques_hpp
   #define Metriques_hpp
 

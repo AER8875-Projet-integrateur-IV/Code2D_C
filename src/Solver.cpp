@@ -17,7 +17,7 @@ double CalculateDeltat(double volume){
 }
 
 double CalculateResidual(){
-  //calcul du r/sidu ici
+  //calcul du r/sidu ici c'est ici que va le roe scheme
   return 0; //changer 0 pour residu
 }
 

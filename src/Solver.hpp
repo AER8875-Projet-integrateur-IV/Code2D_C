@@ -10,9 +10,9 @@
 #include <iostream>
 #include <vector>
 
-
+void Solve();
 double CalculateDeltat(double volume);
-double CalculateResidual();
+std::vector<double> CalculateFlux();
 std::vector<double> CalculateW();
 void UpdateW();
 void UpdateGhostsCells();

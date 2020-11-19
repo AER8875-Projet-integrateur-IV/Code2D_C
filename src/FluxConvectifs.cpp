@@ -10,7 +10,7 @@ using namespace std;
 
 class FluxConvectifs {
   public:
-    FluxConvectifs(vector<double> valeursInit);
+    void initialize(vector<double> valeursInit);
 
     double rho;
     double u;
@@ -18,9 +18,10 @@ class FluxConvectifs {
     double H;
     double p;
 
+
 };
 
-FluxConvectifs::FluxConvectifs(vector<double> valeursInit) {
+void FluxConvectifs::initialize(vector<double> valeursInit) {
 
   rho = valeursInit[0];
   u = valeursInit[1];

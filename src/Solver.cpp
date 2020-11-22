@@ -75,7 +75,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
   }
 
 
-  return {Flux}; //changer 0 pour residu
+  return Flux; //changer 0 pour residu
 }
 
 vector<double> CalculateW(){

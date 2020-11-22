@@ -3,8 +3,10 @@
 #include "metrics.cpp"
 #include "FluxConvectifs.cpp"
 #include "Solver.cpp"
+#include "BoundaryConditions.cpp"
 #include <list>
 using namespace std;
+
 
 int main() {
 
@@ -13,12 +15,7 @@ int main() {
     Metrics();
 
     //creation de NELEM variables W (1 par element) contenant les variables_conservatrices
-    struct variables_conservatrices {
-      double rho;
-      double rho_u;
-      double rho_v;
-      double rho_E;
-    } W [NELEM];
+    variables_conservatrices W [NELEM];
 
     //initialisation des flux FluxConvectifs pour nelem, a faire pour chaque element quand on calcule les flux
     vector<double> valeursInit = {4,3,2,1,0};

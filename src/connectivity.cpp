@@ -216,7 +216,7 @@ void Connectivity(){
   nGhostCells = nElemTot - NELEM;
 
 
-  //int nFaceInt = faceCount;// Nombre de faces interne
+  //int nFaceInt = faceCount; // Nombre de faces interne
   //int nBondFaces;           // Nombre de faces frontieres
 
 

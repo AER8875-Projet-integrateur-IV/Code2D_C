@@ -12,10 +12,27 @@ void Solve(){
   // appel des fonctions definies plus bas pour resoudre
 }
 
+std::vector<double> CalculateDeltat(double volume){
+  vector<double> dt[NELEM]; // = {0};
+  vector<double> c[NELEM]; //  = {0};
+  double SSx = 0;
+  double SSy = 0;
+  double RayonSpecX;
+  double RayonSpecY;
+  double RayonSpec;
 
-double CalculateDeltat(double volume){
-  //calcul de delta t ici
-  return 0; //changer 0 pour delta t
+  for (int iElem = 0; iElem < NELEM; iElem++){
+    for (int iFace = 0; iFace < cell2nodeStart[iElem]; iFace++){
+      SSx += normalVec[iElem][iFace][0];
+      SSy += normalVec[iElem][iFace][1];
+      c[iElem] = sqrt(gammaFluid*FluxConvectifs[iElem].p/FluxConvectifs[iElem].rho);
+      }
+    RayonSpecX = 0.5*(abs(FluxConvectifs.u[iElem])+c)*SSx;
+    RayonSpecY = 0.5*(abs(FluxConvectifs.v[iElem])+c)*SSy;
+    RayonSpec = RayonSpecX+RayonSpecY;
+    dt[iElem] = CFL*area[iElem]/RayonSpec;
+  }
+  return dt;
 }
 
 vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<double> n){

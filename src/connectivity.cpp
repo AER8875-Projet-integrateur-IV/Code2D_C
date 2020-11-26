@@ -3,7 +3,6 @@
 void Connectivity(){
   cout << "----- Starting Connectivity Calculations -----" << endl;
 
-  int nFaces = 60; // il reste a implement un algo pour compter les faces
   int startI;
   int endI;
   int nodeI;
@@ -12,7 +11,8 @@ void Connectivity(){
   cout << "reading done!" << '\n';
   cout << "NDIME  = " << NDIME << '\n';
   cout << "NELEM  = " << NELEM << '\n';
-  cout << "Npoint = " <<NPOIN << '\n';
+  cout << "NPOIN  = " << NPOIN << '\n';
+  cout << "NFACE  = " << NFACE << '\n';
 
   cout << "cell2nodeStart: " << '\n';
   for (int i = 0; i < NELEM+1; i++){
@@ -109,7 +109,7 @@ void Connectivity(){
       fsuel.push_back(-1);
   }
   vector<int> face2el;
-  for(int i=0;i<(nFaces * 2);i++) {
+  for(int i=0;i<(NFACE * 2);i++) {
       face2el.push_back(-1);
   }
   int faceCount = 0;
@@ -198,7 +198,7 @@ void Connectivity(){
 
   // Parcours de esuel pour calculer le nombre d'elements au total
   int elemCount = NELEM;
-  faceCount = nFaces;
+  faceCount = NFACE;
   int nElemTot;
   int nGhostCells;
 

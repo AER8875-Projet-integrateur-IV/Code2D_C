@@ -6,6 +6,7 @@ vector<vector<double> > coord;
 int NDIME;
 int NPOIN;
 int NELEM;
+int NFACE;
 vector<int> cell2node;
 vector<int> cell2nodeStart = {0};
 vector<int> nNodeb;
@@ -90,6 +91,8 @@ void MeshReader () {
         cout << "[ERROR] : Nombre de nodes pas reconnu" << '\n';
         break;
       }
+
+      NFACE = cell2nodeStart[NELEM];
 
       // Store each node in the right line and in the right order in the cell2node vector
       ss_2 >> word_2;
@@ -230,10 +233,11 @@ void MeshReader () {
           cout << "[ERROR]: Could not read file correctly. Missing 'MARKER_TAG='" << endl;
           break;
         }
+        NFACE += nElemb[i];
       }
     }
 
-
+    NFACE = NFACE/2;
 
   myfile.close();
   }

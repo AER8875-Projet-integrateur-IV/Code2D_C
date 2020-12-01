@@ -8,7 +8,7 @@
 using namespace std;
 
 
-void Solve(FluxConvectifs *valeurs, variables_conservatrices* produits){
+void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
   // appel des fonctions definies plus bas pour resoudre
   double deltat[NELEM];
   vector<double> v(4);
@@ -37,7 +37,8 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* produits){
   for (size_t iElem = 0; iElem < NELEM; iElem++) {
     //calcul du deltat pour chaque element
     deltat[iElem] = CalculateDeltat(iElem, valeurs[iElem], area[iElem], normalVec[iElem]);
-
+    deltaW[iElem] = CalculateW(iElem, deltat[iElem], area[iElem], residu[iElem]);
+    UpdateW(iElem, W, deltaW[iElem]);
   }
 }
 
@@ -122,22 +123,22 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
   return Flux; //changer 0 pour residu
 }
 
-vector<double> CalculateW(int iElem, double dt, double volume, double Fc){
+vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc){
   // Calcul de delta W
   double deltaW[4];
-  deltaW[iElem] = -dt * Fc / volume;
-  deltaW[iElem] = -dt * Fc / volume;
-  deltaW[iElem] = -dt * Fc / volume;
-  deltaW[iElem] = -dt * Fc / volume;
+  deltaW[iElem] = -dt * Fc[0] / volume;
+  deltaW[iElem] = -dt * Fc[1] / volume;
+  deltaW[iElem] = -dt * Fc[2] / volume;
+  deltaW[iElem] = -dt * Fc[3] / volume;
 
   return {deltaW[0],deltaW[1],deltaW[2],deltaW[3]};
 }
 
-void UpdateW(int iElem, variables_conservatrices* produits){
-  produits[iElem].rho   = 0;
-  produits[iElem].rho_u = 0;
-  produits[iElem].rho_v = 0;
-  produits[iElem].rho_E = 0;
+void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW){
+  produits[iElem].rho   = deltaW[0];
+  produits[iElem].rho_u = deltaW[1];
+  produits[iElem].rho_v = deltaW[2];
+  produits[iElem].rho_E = deltaW[3];
 }
 
 void UpdateGhostsCells(){

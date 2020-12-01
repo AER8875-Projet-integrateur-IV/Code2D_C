@@ -27,8 +27,8 @@ struct variables_conservatrices {
 void Solve();
 double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<vector<double> > normal);
 std::vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<double> n);
-std::vector<double> CalculateW();
-void UpdateW();
+std::vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc);
+void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW);
 void UpdateGhostsCells();
 
 

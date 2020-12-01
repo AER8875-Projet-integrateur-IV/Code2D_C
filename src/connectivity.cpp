@@ -1,5 +1,8 @@
 #include "connectivity.hpp"
 
+//global variables
+vector<int> face2el;
+
 void Connectivity(){
   cout << "----- Starting Connectivity Calculations -----" << endl;
 
@@ -108,7 +111,7 @@ void Connectivity(){
   for(int i=0;i<esuelStart.back();i++) {
       fsuel.push_back(-1);
   }
-  vector<int> face2el;
+
   for(int i=0;i<(NFACE * 2);i++) {
       face2el.push_back(-1);
   }

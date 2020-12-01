@@ -7,15 +7,31 @@
 #include "Solver.hpp"
 using namespace std;
 
-void Solve(){
-  // iteration sur toutes les faces
+
+void Solve(FluxConvectifs *valeurs){
   // appel des fonctions definies plus bas pour resoudre
   vector<double> deltat[NELEM];
-  vector<double> residu[NELEM];
+  vector<double> v(4);
+  vector<vector<double> > residu(NELEM,v);
   vector<double> deltaW[NELEM];
   //iteration sur toutes les Faces
   for (size_t iface = 0; iface < NFACE; iface++) {
-    /* code */
+    int iElem_left = face2el[2*iface];
+    int iElem_right = face2el[2*iface+1];
+
+    //calcul des flux convetifs avec roe pour la face iface
+    vector<double> flux = {0,0,0,0};
+    FluxConvectifs left = valeurs[iElem_left];
+    FluxConvectifs right = valeurs[iElem_right];
+    flux = CalculateFlux(left, right, normalVec[iElem_left][iface]);
+
+    //iteration sur les composantes de Fc pour les sommer au residu
+    for (size_t i = 0; i < 4; i++) {
+      residu[iElem_left][i] += flux[i];
+      residu[iElem_right][i] -= flux[i];
+      cout << residu[iElem_left][i] << '\n';
+    }
+
   }
   //iteration sur tous les cellules
   for (size_t iElem = 0; iElem < NELEM; iElem++) {

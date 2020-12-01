@@ -19,6 +19,7 @@ int main() {
 
     //initialisation des flux FluxConvectifs pour nelem, a faire pour chaque element quand on calcule les flux
     vector<double> valeursInit = {4,3,2,1,0};
+
     FluxConvectifs valeurs[NELEM];
 
     for (size_t i = 0; i < NELEM; i++) {
@@ -30,6 +31,7 @@ int main() {
       // cout << valeurs[i].H << '\n';
       // cout << valeurs[i].p << '\n';
     }
+
 
 
     vector<double> a = CalculateFlux(valeurs[0], valeurs[1], normalVec[0][0]);
@@ -46,6 +48,8 @@ int main() {
     // while (erreur_max > critere) {
     //   Solve();
     // }
+
+    Solve(valeurs);
 
 
     return 0;

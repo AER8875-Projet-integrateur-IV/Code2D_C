@@ -43,22 +43,25 @@ int main() {
 
 
 
-    vector<double> a = CalculateFlux(valeurs[0], valeurs[1], normalVec[0][0]);
-    cout << a[0] << '\n';
+    // vector<double> a = CalculateFlux(valeurs[0], valeurs[1], normalVec[0][0]);
+    // cout << a[0] << '\n';
 
     //initia de l'ecoulement aux valeurs a l'infini
 
     //mise a jour des conditions fantomes (BoundaryConditions)
 
     //iteration sur les cellules jusqu'a convergence
-    // double erreur_max = 1000;
-    // double critere = 1.0e-5;
-    // double nbIterMax = 1000;
-    // while (erreur_max > critere) {
-    //   Solve();
-    // }
+    double erreur_max = 1000;
+    double critere = 1.0e-5;
+    double nbIterMax = 10;
+    int Iter = 0;
+    while (erreur_max > critere && Iter < nbIterMax) {
+      cout << "test" << '\n';
+      Solve(valeurs, W);
+      Iter++;
+      cout << "rho cell 0: "<< W[0].rho << " Iter: " << Iter << '\n';
+    }
 
-    Solve(valeurs, W);
 
 
     return 0;

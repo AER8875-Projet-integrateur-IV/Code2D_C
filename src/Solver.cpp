@@ -14,30 +14,38 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
   vector<double> v(4);
   vector<vector<double> > residu(NELEM,v);
   vector<double> deltaW[NELEM];
-
+  vector<double> flux = {0,0,0,0};
+  FluxConvectifs left;
+  FluxConvectifs right;
+  cout << NFACE << '\n';
 
 
   //iteration sur toutes les Faces
   for (size_t iface = 0; iface < NFACE; iface++) {
+    cout << "face: " << iface << '\n';
     int iElem_left = face2el[2*iface];
+
     int iElem_right = face2el[2*iface+1];
+    cout << "iElem_right: " << iElem_right << " u: " << valeurs[iElem_right].u <<'\n';
 
     //calcul des flux convectifs avec roe pour la face iface
-    vector<double> flux = {0,0,0,0};
-    FluxConvectifs left = valeurs[iElem_left];
-    FluxConvectifs right = valeurs[iElem_right];
-    flux = CalculateFlux(left, right, normalVec[iElem_left][iface]);
 
+    left = valeurs[iElem_left];
+    cout << "test a "<< '\n';
+    right = valeurs[iElem_right];
+    cout <<"  u left cell: "<< right.u << "  normalVecx: "<< normalVec[iElem_left][iface][0] <<'\n';
+    flux = CalculateFlux(left, right, normalVec[iElem_left][iface]);
     //iteration sur les composantes de Fc pour les sommer au residu
     for (size_t i = 0; i < 4; i++) {
       residu[iElem_left][i] += flux[i]*deltaS[iElem_left][iface]; // le schema de roe multiplie-t-il deja par la normale?
       residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][iface];
-      cout << residu[iElem_left][i] << '\n';
+      cout << residu[iElem_left][i] << " (residu)" << '\n';
     }
 
   }
   //iteration sur tous les cellules
   for (size_t iElem = 0; iElem < NELEM; iElem++) {
+
     //preparation des valeurs
     W[iElem].Energy = ComputeEnergy(valeurs[iElem].rho, valeurs[iElem].u, valeurs[iElem].v, valeurs[iElem].p,gammaFluid);
     W[iElem].rho = valeurs[iElem].rho;
@@ -134,13 +142,12 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
                               rho_avg*V_center*v_avg - n[1]*p_avg,
                               rho_avg*V_center*H_avg};
 
-
   vector<double> Flux = {0,0,0,0};
   for (size_t i = 0; i < 4; i++) {
     Flux[i] = 0.5*(2*flux_center[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
   }
 
-
+  cout << "flux convectif[0]: " << Flux[0] << '\n';
   return Flux; //changer 0 pour residu
 }
 

@@ -12,26 +12,24 @@ void Solve(){
   // appel des fonctions definies plus bas pour resoudre
 }
 
-std::vector<double> CalculateDeltat(FluxConvectifs valeurs){
-  vector<double> dt[NELEM]; // = {0};
-  vector<double> c[NELEM]; //  = {0};
+double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<double> normal){
+  double dt;
+  double c;
   double SSx = 0;
   double SSy = 0;
   double RayonSpecX;
   double RayonSpecY;
   double RayonSpec;
 
-  for (int iElem = 0; iElem < NELEM; iElem++){
-    for (int iFace = 0; iFace < cell2nodeStart[iElem]; iFace++){
-      SSx += normalVec[iElem][iFace][0];
-      SSy += normalVec[iElem][iFace][1];
-      c[iElem] = sqrt(gammaFluid*valeurs[iElem].p/valeurs[iElem].rho);
-      }
-    RayonSpecX = 0.5*(abs(valeurs[iElem].u)+c)*SSx;
-    RayonSpecY = 0.5*(abs(valeurs[iElem].v)+c)*SSy;
-    RayonSpec = RayonSpecX+RayonSpecY;
-    dt[iElem] = CFL*area[iElem]/RayonSpec;
-  }
+  for (int iFace = 0; iFace < cell2nodeStart[iElem]; iFace++){
+    SSx += normal[0];
+    SSy += normal[1];
+    c = pow(gammaFluid*valeurs.p/valeurs.rho,0.5);
+    }
+  RayonSpecX = 0.5*(abs(valeurs.u)+c)*SSx;
+  RayonSpecY = 0.5*(abs(valeurs.v)+c)*SSy;
+  RayonSpec = RayonSpecX+RayonSpecY;
+  dt = CFL*volume/RayonSpec;
   return dt;
 }
 
@@ -95,8 +93,12 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
   return Flux; //changer 0 pour residu
 }
 
-vector<double> CalculateW(){
+vector<double> CalculateW(int iElem, double dt, variables_conservatrices* produits, double volume, double Fc){
   // Calcul de delta W
+  produits[iElem].rho   = -dt * Fc / volume;
+  produits[iElem].rho_u = -dt * Fc / volume;
+  produits[iElem].rho_v = -dt * Fc / volume;
+  produits[iElem].rho_E = -dt * Fc / volume;
   return {0};//changer 0 pour W
 }
 

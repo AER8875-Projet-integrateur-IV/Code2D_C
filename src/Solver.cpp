@@ -10,6 +10,18 @@ using namespace std;
 void Solve(){
   // iteration sur toutes les faces
   // appel des fonctions definies plus bas pour resoudre
+  vector<double> deltat[NELEM];
+  vector<double> residu[NELEM];
+  vector<double> deltaW[NELEM];
+  //iteration sur toutes les Faces
+  for (size_t iface = 0; iface < NFACE; iface++) {
+    /* code */
+  }
+  //iteration sur tous les cellules
+  for (size_t iElem = 0; iElem < NELEM; iElem++) {
+    //calcul du deltat pour chaque element
+    //deltat[iElem] = CalculateDeltat(valeurs);
+  }
 }
 
 double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<double> normal){

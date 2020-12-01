@@ -23,6 +23,9 @@ struct variables_conservatrices {
   double rho_u;
   double rho_v;
   double rho_E;
+  double pressure;
+  double Enthalpy;
+  double Energy
 };
 void Solve();
 double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<vector<double> > normal);

@@ -49,7 +49,7 @@ int main() {
     //   Solve();
     // }
 
-    Solve(valeurs);
+    Solve(valeurs, W);
 
 
     return 0;

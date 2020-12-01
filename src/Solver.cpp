@@ -8,9 +8,9 @@
 using namespace std;
 
 
-void Solve(FluxConvectifs *valeurs){
+void Solve(FluxConvectifs *valeurs, variables_conservatrices* produits){
   // appel des fonctions definies plus bas pour resoudre
-  vector<double> deltat[NELEM];
+  double deltat[NELEM];
   vector<double> v(4);
   vector<vector<double> > residu(NELEM,v);
   vector<double> deltaW[NELEM];
@@ -19,7 +19,7 @@ void Solve(FluxConvectifs *valeurs){
     int iElem_left = face2el[2*iface];
     int iElem_right = face2el[2*iface+1];
 
-    //calcul des flux convetifs avec roe pour la face iface
+    //calcul des flux convectifs avec roe pour la face iface
     vector<double> flux = {0,0,0,0};
     FluxConvectifs left = valeurs[iElem_left];
     FluxConvectifs right = valeurs[iElem_right];
@@ -27,8 +27,8 @@ void Solve(FluxConvectifs *valeurs){
 
     //iteration sur les composantes de Fc pour les sommer au residu
     for (size_t i = 0; i < 4; i++) {
-      residu[iElem_left][i] += flux[i];
-      residu[iElem_right][i] -= flux[i];
+      residu[iElem_left][i] += flux[i]*deltaS[iElem_left][iface]; // le schema de roe multiplie-t-il deja par la normale?
+      residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][iface];
       cout << residu[iElem_left][i] << '\n';
     }
 
@@ -36,11 +36,12 @@ void Solve(FluxConvectifs *valeurs){
   //iteration sur tous les cellules
   for (size_t iElem = 0; iElem < NELEM; iElem++) {
     //calcul du deltat pour chaque element
-    //deltat[iElem] = CalculateDeltat(valeurs);
+    deltat[iElem] = CalculateDeltat(iElem, valeurs[iElem], area[iElem], normalVec[iElem]);
+
   }
 }
 
-double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<double> normal){
+double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<vector<double> > normal){
   double dt;
   double c;
   double SSx = 0;
@@ -50,8 +51,8 @@ double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<
   double RayonSpec;
 
   for (int iFace = 0; iFace < cell2nodeStart[iElem]; iFace++){
-    SSx += normal[0];
-    SSy += normal[1];
+    SSx += normal[iFace][0];
+    SSy += normal[iFace][1];
     c = pow(gammaFluid*valeurs.p/valeurs.rho,0.5);
     }
   RayonSpecX = 0.5*(abs(valeurs.u)+c)*SSx;
@@ -121,17 +122,22 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
   return Flux; //changer 0 pour residu
 }
 
-vector<double> CalculateW(int iElem, double dt, variables_conservatrices* produits, double volume, double Fc){
+vector<double> CalculateW(int iElem, double dt, double volume, double Fc){
   // Calcul de delta W
-  produits[iElem].rho   = -dt * Fc / volume;
-  produits[iElem].rho_u = -dt * Fc / volume;
-  produits[iElem].rho_v = -dt * Fc / volume;
-  produits[iElem].rho_E = -dt * Fc / volume;
-  return {0};//changer 0 pour W
+  double deltaW[4];
+  deltaW[iElem] = -dt * Fc / volume;
+  deltaW[iElem] = -dt * Fc / volume;
+  deltaW[iElem] = -dt * Fc / volume;
+  deltaW[iElem] = -dt * Fc / volume;
+
+  return {deltaW[0],deltaW[1],deltaW[2],deltaW[3]};
 }
 
-void UpdateW(){
-
+void UpdateW(int iElem, variables_conservatrices* produits){
+  produits[iElem].rho   = 0;
+  produits[iElem].rho_u = 0;
+  produits[iElem].rho_v = 0;
+  produits[iElem].rho_E = 0;
 }
 
 void UpdateGhostsCells(){

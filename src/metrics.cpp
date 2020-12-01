@@ -4,6 +4,7 @@
 vector<double> area;
 vector<vector<double> > centroidVec;
 vector<vector<vector<double> > > normalVec;
+vector<vector<double> > deltaS;
 
 void Metrics(){
   cout << "----- Starting Metriques Calculations -----" << endl;
@@ -97,6 +98,7 @@ void Metrics(){
 
   // Resize the normal vector to match the number of elements
   normalVec.resize(NELEM);
+  deltaS.resize(NELEM);
 
   for (int iElem = 0; iElem<NELEM; iElem++){
     // Find the number of points inside the element
@@ -104,7 +106,7 @@ void Metrics(){
 
     // Resize the next vector in the normal array
     normalVec[iElem].resize(nbPoint); // True because in 2D number of faces = number of points
-
+    deltaS[iElem].resize(nbPoint);
     // Store in a vector the nodes associated with an element
     // Store for a second time the first point at the end of the vector to
     // calculate the last normal vector
@@ -121,6 +123,7 @@ void Metrics(){
     for (int i = 0; i<nbPoint; i++){
       vector<double> coord1 = coord[numPt[i]];
       vector<double> coord2 = coord[numPt[i+1]];
+      deltaS[iElem][i] = pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2);
       normalVec[iElem][i].push_back((coord2[1]-coord1[1])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
       normalVec[iElem][i].push_back((coord1[0]-coord2[0])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
 

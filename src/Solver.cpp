@@ -162,8 +162,17 @@ void UpdateW(int iElem, variables_conservatrices* produits, vector<double> delta
   produits[iElem].rho_E += deltaW[3];
 }
 
-void UpdateGhostsCells(){
+void UpdateGhostsCells(vector<double> FcBC, double volume){
   //boucler sur les faces externes copier les valeurs des elements internes
+  for (int iFace = 0; iFace < boundFace.size(); iFace++){
+    int elem = face2el[2*iFace];
+	  double Area = face2Area[iFace];
+
+	... += FcBC[iFace].rho * volume;
+	... += FcBC[iFace].u * volume;
+	... += FcBC[iFace].v * volume;
+	... += FcBC[iFace].H * volume;
+	}
 }
 
 double ComputeEnergy(double rho, double u, double v, double p, double gamma){

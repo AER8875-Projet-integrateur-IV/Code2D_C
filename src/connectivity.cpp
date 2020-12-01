@@ -173,7 +173,7 @@ void Connectivity(){
                                   else
                                       face2el.push_back(elementI);
                                    if (faceCount*2+1<face2el.size())
-                                      face2el.at(faceCount*2+0) = elementJ;
+                                      face2el.at(faceCount*2+1) = elementJ;
                                   else
                                       face2el.push_back(elementJ) ;
                                   faceCount += 1;
@@ -192,13 +192,13 @@ void Connectivity(){
   cout<<"Element to element = ";
   for (int i=0;i<esuel.size();i++) cout<<esuel.at(i) << " ";
   cout <<"\n";
-  cout<<"Face to element = ";
+  cout<<"element to face = ";
   for (int i=0;i<fsuel.size();i++) cout<<fsuel.at(i) << " ";
   cout<< "\n";
 
   // Parcours de esuel pour calculer le nombre d'elements au total
   int elemCount = NELEM;
-  faceCount = NFACE;
+  //faceCount = NFACE;
   int nElemTot;
   int nGhostCells;
 
@@ -216,8 +216,7 @@ void Connectivity(){
   nGhostCells = nElemTot - NELEM;
 
 
-  //int nFaceInt = faceCount; // Nombre de faces interne
-  //int nBondFaces;           // Nombre de faces frontieres
+
 
 
   // Parcours de fsuel pour calculer le nombre de faces au total
@@ -225,6 +224,9 @@ void Connectivity(){
   for (int i=0;i<esuel.size();i++) cout<<esuel.at(i) << " ";
   cout <<"\n";
   cout<<"Face to element = ";
+  for (int i=0;i<face2el.size();i++) cout<<face2el.at(i) << " ";
+  cout<< "\n";
+  cout<<"element to face = ";
   for (int i=0;i<fsuel.size();i++) cout<<fsuel.at(i) << " ";
   cout<< "\n";
 

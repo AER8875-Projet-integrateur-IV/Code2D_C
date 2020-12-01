@@ -39,11 +39,11 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
   //iteration sur tous les cellules
   for (size_t iElem = 0; iElem < NELEM; iElem++) {
     //preparation des valeurs
-    W[iElem].Energy = ComputeEnergy(rhoInf, uInf,vInf, PressInf,gammaFluid);
-    W[iElem].rho = rhoInf;
-    W[iElem].rho_u = rhoInf * uInf;
-    W[iElem].rho_v = rhoInf * vInf;
-    W[iElem].rho_E = rhoInf * W[iElem].Energy;
+    W[iElem].Energy = ComputeEnergy(valeurs[iElem].rho, valeurs[iElem].u, valeurs[iElem].v, valeurs[iElem].p,gammaFluid);
+    W[iElem].rho = valeurs[iElem].rho;
+    W[iElem].rho_u = valeurs[iElem].rho * valeurs[iElem].u;
+    W[iElem].rho_v = valeurs[iElem].rho * valeurs[iElem].v;
+    W[iElem].rho_E = valeurs[iElem].rho * W[iElem].Energy;
     //calcul du deltat pour chaque element
     deltat[iElem] = CalculateDeltat(iElem, valeurs[iElem], area[iElem], normalVec[iElem]);
     deltaW[iElem] = CalculateW(iElem, deltat[iElem], area[iElem], residu[iElem]);
@@ -164,15 +164,15 @@ void UpdateW(int iElem, variables_conservatrices* produits, vector<double> delta
 
 void UpdateGhostsCells(vector<double> FcBC, double volume){
   //boucler sur les faces externes copier les valeurs des elements internes
-  for (int iFace = 0; iFace < boundFace.size(); iFace++){
-    int elem = face2el[2*iFace];
-	  double Area = face2Area[iFace];
-
-	... += FcBC[iFace].rho * volume;
-	... += FcBC[iFace].u * volume;
-	... += FcBC[iFace].v * volume;
-	... += FcBC[iFace].H * volume;
-	}
+  // for (int iFace = 0; iFace < boundFace.size(); iFace++){
+  //   int elem = face2el[2*iFace];
+	//   double Area = face2Area[iFace];
+  //
+	// ... += FcBC[iFace].rho * volume;
+	// ... += FcBC[iFace].u * volume;
+	// ... += FcBC[iFace].v * volume;
+	// ... += FcBC[iFace].H * volume;
+	// }
 }
 
 double ComputeEnergy(double rho, double u, double v, double p, double gamma){

@@ -16,6 +16,15 @@ int main() {
 
     //creation de NELEM variables W (1 par element) contenant les variables_conservatrices
     variables_conservatrices W [NELEM];
+    //initialisation des valeurs conservatrices
+    for (size_t iElem = 0; iElem < NELEM; iElem++) {
+      W[iElem].Energy = ComputeEnergy(rhoInf, uInf,vInf, PressInf,gammaFluid);
+      W[iElem].rho = rhoInf;
+      W[iElem].rho_u = rhoInf * uInf;
+      W[iElem].rho_v = rhoInf * vInf;
+      W[iElem].rho_E = rhoInf * W[iElem].Energy;
+    }
+
 
     //initialisation des flux FluxConvectifs pour nelem, a faire pour chaque element quand on calcule les flux
     vector<double> valeursInit = {4,3,2,1,0};

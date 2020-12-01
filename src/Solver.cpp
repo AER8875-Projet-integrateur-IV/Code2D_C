@@ -76,7 +76,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
   double c = sqrt((gamma-1)*(H-pow(q,2)/2));
   //je fais *-1 a la mormale pour obtenir la normale de l<autre face
   double V_left = left.u*n[0] + left.v*n[1];
-  double V_right = right.u*(-1)*n[0] + right.v*(-1)*n[1];
+  double V_right = right.u*n[0] + right.v*n[1];
   double deltaV = V_left - V_right;
   double deltap = left.p - right.p;
   double deltarho = left.rho - right.rho;
@@ -102,21 +102,33 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
     deltaF5[i] = deltaF5[i]*abs(V+c)*(deltap + rho*c*deltaV)/(2*pow(c,2));
   }
 
-  vector<double> flux_left = {left.rho*V_left,
-                              left.rho*V_left*left.u + n[0]*left.p,
-                              left.rho*V_left*left.v + n[1]*left.p,
-                              left.rho*V_left*left.H};
+  // vector<double> flux_left = {left.rho*V_left,
+  //                             left.rho*V_left*left.u + n[0]*left.p,
+  //                             left.rho*V_left*left.v + n[1]*left.p,
+  //                             left.rho*V_left*left.H};
+  //
+  // vector<double> flux_right = {right.rho*V_right,
+  //                             right.rho*V_right*right.u - n[0]*right.p,
+  //                             right.rho*V_right*right.v - n[1]*right.p,
+  //                             right.rho*V_right*right.H};
 
-  vector<double> flux_right = {right.rho*V_right,
-                              right.rho*V_right*right.u - n[0]*right.p,
-                              right.rho*V_right*right.v - n[1]*right.p,
-                              right.rho*V_right*right.H};
+  double rho_avg = 0.5*(right.rho + left.rho);
+  double u_avg = 0.5*(right.u + left.u);
+  double v_avg = 0.5*(right.v + left.v);
+  double p_avg = 0.5*(right.p + left.p);
+  double H_avg = 0.5*(right.H + left.H);
+  double V_center = u_avg*n[0] + v_avg*n[1];
 
+
+  vector<double> flux_center = {rho_avg*V_center,
+                              rho_avg*V_center*u_avg - n[0]*p_avg,
+                              rho_avg*V_center*v_avg - n[1]*p_avg,
+                              rho_avg*V_center*H_avg};
 
 
   vector<double> Flux = {0,0,0,0};
   for (size_t i = 0; i < 4; i++) {
-    Flux[i] = 0.5*(flux_left[i] + flux_right[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
+    Flux[i] = 0.5*(2*flux_center[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
   }
 
 
@@ -135,12 +147,12 @@ vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc
 }
 
 void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW){
-  produits[iElem].rho   = deltaW[0];
-  produits[iElem].rho_u = deltaW[1];
-  produits[iElem].rho_v = deltaW[2];
-  produits[iElem].rho_E = deltaW[3];
+  produits[iElem].rho   += deltaW[0];
+  produits[iElem].rho_u += deltaW[1];
+  produits[iElem].rho_v += deltaW[2];
+  produits[iElem].rho_E += deltaW[3];
 }
 
 void UpdateGhostsCells(){
-
+  //boucler sur les faces externes copier les valeurs des elements internes
 }

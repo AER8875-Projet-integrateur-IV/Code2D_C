@@ -10,8 +10,6 @@
 #include <iostream>
 #include <vector>
 
-double tolerance = 0.001;
-double nbIterMax = 1000;
 double gammaFluid = 1.4;
 double K = 8.3145;
 double Mach = 1.2;
@@ -27,7 +25,7 @@ struct variables_conservatrices {
   double rho_E;
 };
 void Solve();
-std::vector<double> CalculateDT(double volume);
+double CalculateDeltat();
 std::vector<double> CalculateFlux();
 std::vector<double> CalculateW();
 void UpdateW();

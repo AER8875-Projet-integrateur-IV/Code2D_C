@@ -35,5 +35,18 @@ int main() {
     vector<double> a = CalculateFlux(valeurs[0], valeurs[1], normalVec[0][0]);
     cout << a[0] << '\n';
 
+    //initia de l'ecoulement aux valeurs a l'infini
+
+    //mise a jour des conditions fantomes (BoundaryConditions)
+
+    //iteration sur les cellules jusqu'a convergence
+    // double erreur_max = 1000;
+    // double critere = 1.0e-5;
+    // double nbIterMax = 1000;
+    // while (erreur_max > critere) {
+    //   Solve();
+    // }
+
+
     return 0;
 }

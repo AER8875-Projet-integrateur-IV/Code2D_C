@@ -169,3 +169,10 @@ void UpdateGhostsCells(){
 double ComputeEnergy(double rho, double u, double v, double p, double gamma){
   return 0.5*rho*(pow(u,2)+pow(v,2)) + p * 1/(gamma-1);
 }
+double ComputePressure(double rho, double u, double v, double Energy, double gamma){
+  return (gamma-1)*(rho*Energy-0.5*(pow(rho*u,2)+pow(rho*v,2))/rho);
+}
+
+double ComputeEnthalpy(double rho, double u, double v, double p, double gamma){
+  return ComputeEnergy(rho,u,v,p,(1/(gamma-1))) + p/rho;
+}

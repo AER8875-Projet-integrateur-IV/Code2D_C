@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 double gammaFluid = 1.4;
 double K = 8.3145;
@@ -38,6 +39,7 @@ std::vector<double> CalculateW(int iElem, double dt, double volume, vector<doubl
 void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW);
 void UpdateGhostsCells();
 double ComputeEnergy(double rho, double u, double v, double p, double gamma);
-
+double ComputePressure(double rho, double u, double v, double Energy, double gamma);
+double ComputeEnthalpy(double rho, double u, double v, double p, double gamma);
 
 #endif /* Solver_hpp */

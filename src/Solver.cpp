@@ -33,12 +33,16 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
     left = valeurs[iElem_left];
     cout << "test a "<< '\n';
     right = valeurs[iElem_right]; //cette ligne ne s'excute pas pour la face 3, element 3
-    cout <<"  u left cell: "<< right.u << "  normalVecx: "<< normalVec[iElem_left][iface][0] <<'\n';
+    //cout <<"  u left cell: "<< right.u << "  normalVecx: "<< normalVec[iElem_left][iface][0] <<'\n';
+    for (size_t i = 0; i < 4; i++) {//changer le 4 pour nbfaces elem
+      //int face =
+    }
+
     flux = CalculateFlux(left, right, normalVec[iElem_left][iface]);
     //iteration sur les composantes de Fc pour les sommer au residu
     for (size_t i = 0; i < 4; i++) {
       residu[iElem_left][i] += flux[i]*deltaS[iElem_left][iface]; // le schema de roe multiplie-t-il deja par la normale?
-      residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][iface];
+      residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][iface]; //modifier ici pour la face locale
       cout << residu[iElem_left][i] << " (residu)" << '\n';
     }
 
@@ -167,6 +171,7 @@ void UpdateW(int iElem, variables_conservatrices* produits, vector<double> delta
   produits[iElem].rho_u += deltaW[1];
   produits[iElem].rho_v += deltaW[2];
   produits[iElem].rho_E += deltaW[3];
+  //mettre a jour la H et p en passant fluxconvectifs tous les champs dans flux convectifs
 }
 
 void UpdateGhostsCells(vector<double> FcBC, double volume){

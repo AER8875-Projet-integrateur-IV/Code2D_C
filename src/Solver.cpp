@@ -161,6 +161,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
                               rho_avg*V_center*H_avg};
 
   vector<double> Flux = {0,0,0,0};
+  //cout<<flux_center[0]<<deltaF1[0]<<deltaF234[0]<<deltaF5[0]<<'\n';
   for (size_t i = 0; i < 4; i++) {
     Flux[i] = 0.5*(2.0*flux_center[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
   }
@@ -172,6 +173,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
 vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc){
   // Calcul de delta W
   double deltaW[4] = {0,0,0,0};
+  //cout << "dt: "<<dt<<"Fc[0]: "<<Fc[0]<< "volume: "<< volume<<'\n';
   deltaW[0] = dt * Fc[0] / volume;
   deltaW[1] = dt * Fc[1] / volume;
   deltaW[2] = dt * Fc[2] / volume;

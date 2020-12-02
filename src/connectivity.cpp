@@ -225,6 +225,8 @@ void Connectivity(){
         //face2el[2*fsuel[4*i+j]+1] = boundary element;
       }
   }
+
+}
   //Passage dans face2element pour mettre a jour les ghost cells
 //   for (size_t i = 0; i < NFACE; i++) {
 //     int iElem = face2el[2*i];

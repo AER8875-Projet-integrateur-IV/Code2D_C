@@ -112,11 +112,11 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
   //je fais *-1 a la mormale pour obtenir la normale de l<autre face
   double V_left = left.u*n[0] + left.v*n[1];
   double V_right = right.u*n[0] + right.v*n[1];
-  double deltaV = V_left - V_right;
-  double deltap = left.p - right.p;
-  double deltarho = left.rho - right.rho;
-  double deltau = left.u - right.u;
-  double deltav = left.v - right.v;
+  double deltaV =  V_right - V_left;
+  double deltap =  right.p - left.p;
+  double deltarho =  right.rho - left.rho ;
+  double deltau =   right.u - left.u;
+  double deltav =  right.v - left.v;
 
   vector<double> deltaF1 = {1, u-c*n[0], v-c*n[0], H - c*V};
   for (size_t i = 0; i < 4; i++) {

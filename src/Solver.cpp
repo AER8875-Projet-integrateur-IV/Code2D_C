@@ -102,7 +102,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
 
   vector<double> deltaF1 = {1, u-c*n[0], v-c*n[0], H - c*V};
   for (size_t i = 0; i < 4; i++) {
-    deltaF1[i] = deltaF1[i]*abs(V-c)*(deltap - rho*c*deltaV)/(2*pow(c,2));
+    deltaF1[i] = deltaF1[i]*abs(V-c)*(deltap - rho*c*deltaV)/(2.0*pow(c,2));
   }
 
   vector<double> deltaF234 = {1, u, v, pow(q,2)/2};
@@ -116,7 +116,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
 
   vector<double> deltaF5 = {1, u+c*n[0], v+c*n[1], H+c*V};
   for (size_t i = 0; i < 4; i++) {
-    deltaF5[i] = deltaF5[i]*abs(V+c)*(deltap + rho*c*deltaV)/(2*pow(c,2));
+    deltaF5[i] = deltaF5[i]*abs(V+c)*(deltap + rho*c*deltaV)/(2.0*pow(c,2));
   }
 
   // vector<double> flux_left = {left.rho*V_left,
@@ -144,7 +144,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
 
   vector<double> Flux = {0,0,0,0};
   for (size_t i = 0; i < 4; i++) {
-    Flux[i] = 0.5*(2*flux_center[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
+    Flux[i] = 0.5*(2.0*flux_center[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
   }
 
   cout << "flux convectif[0]: " << Flux[0] << '\n';
@@ -183,12 +183,12 @@ void UpdateGhostsCells(vector<double> FcBC, double volume){
 }
 
 double ComputeEnergy(double rho, double u, double v, double p, double gamma){
-  return 0.5*rho*(pow(u,2)+pow(v,2)) + p * 1/(gamma-1);
+  return 0.5*rho*(pow(u,2)+pow(v,2)) + p * 1.0/(gamma-1.0);
 }
 double ComputePressure(double rho, double u, double v, double Energy, double gamma){
-  return (gamma-1)*(rho*Energy-0.5*(pow(rho*u,2)+pow(rho*v,2))/rho);
+  return (gamma-1.0)*(rho*Energy-0.5*(pow(rho*u,2)+pow(rho*v,2))/rho);
 }
 
 double ComputeEnthalpy(double rho, double u, double v, double p, double gamma){
-  return ComputeEnergy(rho,u,v,p,(1/(gamma-1))) + p/rho;
+  return ComputeEnergy(rho,u,v,p,(1.0/(gamma-1.0))) + p/rho;
 }

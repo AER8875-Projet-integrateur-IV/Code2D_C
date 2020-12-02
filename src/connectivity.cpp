@@ -225,9 +225,27 @@ void Connectivity(){
         //face2el[2*fsuel[4*i+j]+1] = boundary element;
       }
   }
+  //Passage dans face2element pour mettre a jour les ghost cells
+//   for (size_t i = 0; i < NFACE; i++) {
+//     int iElem = face2el[2*i];
+//     if (face2el[2*i+1] == -1) {
+//       int voisin = esuelStart[iElem];
+//       int coin_check = 0;
+//       for (size_t j = 0; j < esuelStart[iElem]-esuelStart[iElem-1]; j++) {
+//         if (esuel[esuelStart[iElem]+j] > NELEM && coin_check == 0) {
+//           cout << "placer element " << esuel[esuelStart[iElem]+j] << " dans la face " << i << '\n';
+//           face2el[2*i+1] = esuel[esuelStart[iElem]+j];
+//           coin_check =1;
+//         }
+//         if (esuel[esuelStart[iElem]+j] > NELEM && coin_check == 1) {
+//           face2el[2*i+3] = esuel[esuelStart[iElem]+j];
+//         }
+//     }
+//
+//   }
+// }
 
-  }
-  // Passage dans face2element pour mettre a jour les ghost cells
+
 	// int countGhostcells = NELEM;
 	// for (int i = 0; i < 2*NFACE; ++i) {
 	// 	if (face2el[i] == -1) {

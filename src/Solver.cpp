@@ -49,8 +49,8 @@ double Solve(FluxConvectifs *valeurs, variables_conservatrices* W, double erreur
     flux = CalculateFlux(left, right, normalVec[iElem_left][facelocale]);
     //iteration sur les composantes de Fc pour les sommer au residu
     for (size_t i = 0; i < 4; i++) {
-      residu[iElem_left][i] += flux[i]*deltaS[iElem_left][facelocale]; // le schema de roe multiplie-t-il deja par la normale?
-      residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][facelocale]; //modifier ici pour la face locale
+      residu[iElem_left][i] -= flux[i]*deltaS[iElem_left][facelocale]; // le schema de roe multiplie-t-il deja par la normale?
+      residu[iElem_right][i] += flux[i]*deltaS[iElem_left][facelocale]; //modifier ici pour la face locale
       cout << residu[iElem_left][i] << " (residu)" << '\n';
     }
 
@@ -87,8 +87,8 @@ double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<
 
   c = pow(gammaFluid*valeurs.p/valeurs.rho,0.5);
   for (int iFace = 0; iFace < 4; iFace++){//etait cell2nodeStart[iElem]
-    SSx += fabs(normal[iFace][0]*volume);
-    SSy += fabs(normal[iFace][1]*volume);
+    SSx += fabs(normal[iFace][0]*deltaS[iElem][iFace]);
+    SSy += fabs(normal[iFace][1]*deltaS[iElem][iFace]);
 
     }
   RayonSpecX = 0.5*(fabs(valeurs.u)+c)*SSx;
@@ -172,10 +172,10 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
 vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc){
   // Calcul de delta W
   double deltaW[4] = {0,0,0,0};
-  deltaW[0] = -dt * Fc[0] / volume;
-  deltaW[1] = -dt * Fc[1] / volume;
-  deltaW[2] = -dt * Fc[2] / volume;
-  deltaW[3] = -dt * Fc[3] / volume;
+  deltaW[0] = dt * Fc[0] / volume;
+  deltaW[1] = dt * Fc[1] / volume;
+  deltaW[2] = dt * Fc[2] / volume;
+  deltaW[3] = dt * Fc[3] / volume;
 
   return {deltaW[0],deltaW[1],deltaW[2],deltaW[3]};
   //si probleme de stack smashing:

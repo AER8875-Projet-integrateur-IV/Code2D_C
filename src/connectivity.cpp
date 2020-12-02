@@ -3,6 +3,7 @@
 //global variables
 vector<int> face2el;
 vector<int> fsuel;
+int nb_faces_externes = 0;
 
 void Connectivity(){
   cout << "----- Starting Connectivity Calculations -----" << endl;
@@ -228,6 +229,7 @@ void Connectivity(){
     }
   }
   cout << "elements internes finis" << '\n';
+
   //Passage dans face2element pour mettre a jour les ghost cells
   for (size_t i = 0; i < NFACE; i++) {
 
@@ -245,11 +247,12 @@ void Connectivity(){
       for (size_t k = 0; k < count; k++) {
         cout << "placer element " << esuel[esuelStart[iElem]+trigger[k]] << " dans la face " << i+k << '\n';
         face2el[2*(i+k)+1] = esuel[esuelStart[iElem]+trigger[k]];
+        nb_faces_externes +=1;
       }
     }
   }
 
-
+  cout << "nombre faces externes: " << nb_faces_externes << '\n';
 	// int countGhostcells = NELEM;
 	// for (int i = 0; i < 2*NFACE; ++i) {
 	// 	if (face2el[i] == -1) {

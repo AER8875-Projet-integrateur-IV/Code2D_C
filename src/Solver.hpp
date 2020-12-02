@@ -7,7 +7,7 @@
 #ifndef Solver_hpp
 #define Solver_hpp
 
-
+#include "BoundaryConditions.cpp"
 #include <iostream>
 #include <vector>
 #include <math.h>

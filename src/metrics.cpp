@@ -124,8 +124,8 @@ void Metrics(){
       vector<double> coord1 = coord[numPt[i]];
       vector<double> coord2 = coord[numPt[i+1]];
       deltaS[iElem][i] = pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2);
-      normalVec[iElem][i].push_back((coord2[1]-coord1[1])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
-      normalVec[iElem][i].push_back((coord1[0]-coord2[0])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
+      normalVec[iElem][i].push_back(-(coord2[1]-coord1[1])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
+      normalVec[iElem][i].push_back(-(coord1[0]-coord2[0])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
 
       // Verify normal coordinates
       for (int j = 0; j<2; j++){

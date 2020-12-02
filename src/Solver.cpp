@@ -62,7 +62,7 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
     //calcul du deltat pour chaque element
     deltat[iElem] = CalculateDeltat(iElem, valeurs[iElem], area[iElem], normalVec[iElem]);
     deltaW[iElem] = CalculateW(iElem, deltat[iElem], area[iElem], residu[iElem]);
-    UpdateW(iElem, W, deltaW[iElem]);
+    UpdateW(iElem, W, deltaW[iElem], valeurs);
   }
 }
 
@@ -169,11 +169,19 @@ vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc
   return {deltaW[0],deltaW[1],deltaW[2],deltaW[3]};
 }
 
-void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW){
+void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW, FluxConvectifs* valeurs){
   produits[iElem].rho   += deltaW[0];
   produits[iElem].rho_u += deltaW[1];
   produits[iElem].rho_v += deltaW[2];
   produits[iElem].rho_E += deltaW[3];
+
+  valeurs[iElem].rho = produits[iElem].rho;
+  valeurs[iElem].u = produits[iElem].rho_u/produits[iElem].rho;
+  valeurs[iElem].v = produits[iElem].rho_v/produits[iElem].rho;
+  produits[iElem].Energy = produits[iElem].rho_E/produits[iElem].rho;
+  double gamma = 1.4;
+  valeurs[iElem].p = ComputePressure(valeurs[iElem].rho, valeurs[iElem].u, valeurs[iElem].v, produits[iElem].Energy, gamma);
+  valeurs[iElem].H = ComputeEnthalpy(valeurs[iElem].rho, valeurs[iElem].u, valeurs[iElem].v, valeurs[iElem].p, gamma );
   //mettre a jour la H et p en passant fluxconvectifs tous les champs dans flux convectifs
 }
 

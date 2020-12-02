@@ -28,15 +28,13 @@ struct variables_conservatrices {
   double rho_u;
   double rho_v;
   double rho_E;
-  double pressure;
-  double Enthalpy;
   double Energy;
 };
 void Solve();
 double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<vector<double> > normal);
 std::vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<double> n);
 std::vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc);
-void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW);
+void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW, FluxConvectifs* valeurs);
 void UpdateGhostsCells();
 double ComputeEnergy(double rho, double u, double v, double p, double gamma);
 double ComputePressure(double rho, double u, double v, double Energy, double gamma);

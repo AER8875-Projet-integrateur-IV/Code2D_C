@@ -225,28 +225,29 @@ void Connectivity(){
         face2el[2*fsuel[4*i+j]] = i;
         //face2el[2*fsuel[4*i+j]+1] = boundary element;
       }
+    }
   }
-
-}
+  cout << "elements internes finis" << '\n';
   //Passage dans face2element pour mettre a jour les ghost cells
-//   for (size_t i = 0; i < NFACE; i++) {
-//     int iElem = face2el[2*i];
-//     if (face2el[2*i+1] == -1) {
-//       int voisin = esuelStart[iElem];
-//       int coin_check = 0;
-//       for (size_t j = 0; j < esuelStart[iElem]-esuelStart[iElem-1]; j++) {
-//         if (esuel[esuelStart[iElem]+j] > NELEM && coin_check == 0) {
-//           cout << "placer element " << esuel[esuelStart[iElem]+j] << " dans la face " << i << '\n';
-//           face2el[2*i+1] = esuel[esuelStart[iElem]+j];
-//           coin_check =1;
-//         }
-//         if (esuel[esuelStart[iElem]+j] > NELEM && coin_check == 1) {
-//           face2el[2*i+3] = esuel[esuelStart[iElem]+j];
-//         }
-//     }
-//
-//   }
-// }
+  for (size_t i = 0; i < NFACE; i++) {
+
+    if (face2el[2*i+1] == -1) {
+      int iElem = face2el[2*i];
+      int voisin = esuelStart[iElem];
+      int trigger[4] = {0,0,0,0};
+      int count = 0;
+      for (size_t j = 0; j < 4; j++) {//esuelStart[iElem+1]-esuelStart[iElem]
+        if (esuel[esuelStart[iElem]+j] > NELEM-1) {
+          trigger[count] +=j;
+          count +=1;
+        }
+      }
+      for (size_t k = 0; k < count; k++) {
+        cout << "placer element " << esuel[esuelStart[iElem]+trigger[k]] << " dans la face " << i+k << '\n';
+        face2el[2*(i+k)+1] = esuel[esuelStart[iElem]+trigger[k]];
+      }
+    }
+  }
 
 
 	// int countGhostcells = NELEM;

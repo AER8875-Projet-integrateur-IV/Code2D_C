@@ -128,23 +128,23 @@ void Metrics(){
       normalVec[iElem][i].push_back((coord1[0]-coord2[0])/sqrt(pow(coord2[1]-coord1[1],2)+pow(coord1[0]-coord2[0],2)));
 
       // Verify normal coordinates
-      for (int j = 0; j<2; j++){
-        cout << normalVec[iElem][i][j] << ' ';
-      }
-      cout << "\n" << '\n';
-      cout << "===========" << '\n';
-      //cout << "----- Test1 -----" << endl;
+    //   for (int j = 0; j<2; j++){
+    //     cout << normalVec[iElem][i][j] << ' ';
+    //   }
+    //   cout << "\n" << '\n';
+    //   cout << "===========" << '\n';
+    //   //cout << "----- Test1 -----" << endl;
     }
 
-    // Test Integral sur les surfaces
+    // Test Integral sur les surfacesS
     double test_x = 0;
     double test_y = 0;
     for (size_t i = 0; i < nbPoint; i++) {
       test_x += normalVec[iElem][i][0];
       test_y += normalVec[iElem][i][1];
     }
-    cout << test_x << '\n';
-    cout << test_y << '\n';
+    //cout << test_x << '\n';
+    //cout << test_y << '\n';
   }
 
   cout << "----- Metriques calculations DONE -----" << '\n';

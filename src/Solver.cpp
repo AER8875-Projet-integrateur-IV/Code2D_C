@@ -8,26 +8,32 @@
 using namespace std;
 
 
-void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
-  // appel des fonctions definies plus bas pour resoudre
-  double deltat[NELEM];
+double Solve(FluxConvectifs *valeurs, variables_conservatrices* W, double erreur){
+  // initialisation des valeurs
+  erreur = 0;
+  double deltat[nElemTot];
   vector<double> v(4);
   vector<vector<double> > residu(nElemTot,v);
-  vector<double> deltaW[NELEM];
+  vector<double> deltaW[nElemTot];
+  for (int i = 0; i < nElemTot;i++)
+  {
+          deltaW[i] = vector<double>(4);
+  }
   vector<double> flux = {0,0,0,0};
   FluxConvectifs left;
   FluxConvectifs right;
-  cout << NFACE << '\n';
+  double nElem = NELEM;
+  //cout << NFACE << '\n';
 
 
   //iteration sur toutes les Faces
   for (size_t iface = 0; iface < NFACE; iface++) {
-    cout << "face: " << iface << '\n';
+    //cout << "face: " << iface << '\n';
     int iElem_left = face2el[2*iface];
     int facelocale;
 
     int iElem_right = face2el[2*iface+1];
-    cout << "iElem_right: " << iElem_right << " u: " << valeurs[iElem_right].u <<'\n';
+    //cout << "iElem_right: " << iElem_right << " u: " << valeurs[iElem_right].u <<'\n';
 
     //calcul des flux convectifs avec roe pour la face iface
 
@@ -62,7 +68,11 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
     deltat[iElem] = CalculateDeltat(iElem, valeurs[iElem], area[iElem], normalVec[iElem]);
     deltaW[iElem] = CalculateW(iElem, deltat[iElem], area[iElem], residu[iElem]);
     UpdateW(iElem, W, deltaW[iElem], valeurs);
+    UpdateGhostsCells(valeurs, W);
+    erreur += pow(deltaW[iElem][0],2);
   }
+  erreur = sqrt(erreur/nElem);
+  return erreur;
 }
 
 double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<vector<double> > normal){
@@ -155,19 +165,23 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
     Flux[i] = 0.5*(2.0*flux_center[i] - deltaF1[i] - deltaF234[i] - deltaF5[i]);
   }
 
-  cout << "flux convectif[0]: " << Flux[0] << '\n';
+  //cout << "flux convectif[0]: " << Flux[0] << '\n';
   return Flux; //changer 0 pour residu
 }
 
 vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc){
   // Calcul de delta W
   double deltaW[4] = {0,0,0,0};
-  deltaW[iElem] = -dt * Fc[0] / volume;
-  deltaW[iElem] = -dt * Fc[1] / volume;
-  deltaW[iElem] = -dt * Fc[2] / volume;
-  deltaW[iElem] = -dt * Fc[3] / volume;
+  deltaW[0] = -dt * Fc[0] / volume;
+  deltaW[1] = -dt * Fc[1] / volume;
+  deltaW[2] = -dt * Fc[2] / volume;
+  deltaW[3] = -dt * Fc[3] / volume;
 
   return {deltaW[0],deltaW[1],deltaW[2],deltaW[3]};
+  //si probleme de stack smashing:
+  //1. changer pour void et enlever le return
+  //2. passer deltW de solve par reference
+  //3. modifier directement deltaw par l'adresse
 }
 
 void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW, FluxConvectifs* valeurs){

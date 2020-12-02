@@ -54,15 +54,16 @@ int main() {
     //mise a jour des conditions fantomes (BoundaryConditions)
 
     //iteration sur les cellules jusqu'a convergence
-    double erreur_max = 1000;
+    double erreur = 1000;
     double critere = 1.0e-5;
-    double nbIterMax = 10;
+    double nbIterMax = 2;
     int Iter = 0;
-    while (erreur_max > critere && Iter < nbIterMax) {
-      cout << "test" << '\n';
-      Solve(valeurs, W);
+    while (erreur > critere && Iter < nbIterMax) {
+      //cout << "test" << '\n';
+      erreur = Solve(valeurs, W, erreur);
+      //double RMS = sqrt(sum(deltaWrho^2)/NELEM)
       Iter++;
-      cout << "rho cell 0: "<< W[0].rho << " Iter: " << Iter << '\n';
+      cout << "erreur: "<< erreur << " Iter: " << Iter << '\n';
     }
 
 

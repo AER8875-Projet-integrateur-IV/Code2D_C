@@ -12,7 +12,7 @@
 
 
 
-std::vector<double> WallCond(FluxConvectifs Bcell, FluxConvectifs cell2, vector<double> n);
+std::vector<double> WallCond(FluxConvectifs Bcell, FluxConvectifs cell2, std::vector<double> n);
 std::vector<double> SuperInflow(variables_conservatrices W_a);
 std::vector<double> SuperOutflow(variables_conservatrices W_d);
 std::vector<double> SubInflow(FluxConvectifs a, FluxConvectifs d, std::vector<double> n, double c0, double rho0);

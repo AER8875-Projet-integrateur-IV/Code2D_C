@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Solver.hpp"
+
 
 
 
@@ -17,6 +17,6 @@ std::vector<double> SuperInflow(variables_conservatrices W_a);
 std::vector<double> SuperOutflow(variables_conservatrices W_d);
 std::vector<double> SubInflow(FluxConvectifs a, FluxConvectifs d, std::vector<double> n, double c0, double rho0);
 std::vector<double> SubOutflow(FluxConvectifs a, FluxConvectifs d, std::vector<double> n, double c0, double rho0;
-
+void UpdateGhostsCells(FluxConvectifs *valeurs, variables_conservatrices* produitsBC, double dt, vector<double> Fc);
 
 #endif /* Solver_hpp */

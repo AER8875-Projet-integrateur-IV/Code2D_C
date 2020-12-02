@@ -7,7 +7,7 @@
 #ifndef Solver_hpp
 #define Solver_hpp
 
-#include "BoundaryConditions.cpp"
+
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -36,7 +36,7 @@ double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<
 std::vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<double> n);
 std::vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc);
 void UpdateW(int iElem, variables_conservatrices* produits, vector<double> deltaW, FluxConvectifs* valeurs);
-void UpdateGhostsCells();
+
 double ComputeEnergy(double rho, double u, double v, double p, double gamma);
 double ComputePressure(double rho, double u, double v, double Energy, double gamma);
 double ComputeEnthalpy(double rho, double u, double v, double p, double gamma);

@@ -3,7 +3,10 @@
 #include "metrics.cpp"
 #include "FluxConvectifs.cpp"
 #include "Solver.cpp"
+#include "BoundaryConditions.cpp"
+
 #include <list>
+
 using namespace std;
 
 

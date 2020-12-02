@@ -60,3 +60,41 @@ std::vector<double> SubOutflow(FluxConvectifs a, FluxConvectifs d, std::vector<d
 
   return v;
 }
+
+void UpdateGhostsCells(FluxConvectifs *valeurs, variables_conservatrices* produitsBC, double dt, vector<double> Fc){
+  //boucler sur les faces externes copier les valeurs des elements internes
+  double deltat[nElemTot];
+  vector<double> v(4);
+  for (int iFace = NFACE-nb_faces_externes; iFace < NFACE; iFace++){
+    int elem = max(face2el[2*iFace],face2el[2*iFace+1]);
+    double volume = area[elem];
+    deltat[elem] = CalculateDeltat(elem, valeurs[elem], volume, normalVec[elem]);
+    vector<double> Win;
+    vector<vector<double> > residu(nElemTot,v);
+    vector<double> flux = {0,0,0,0};
+    int facelocale;
+    for (size_t i = 0; i < 4; i++) {
+      if (fsuel[4*elem+i] == iFace) {
+        facelocale = i;
+      }
+    }
+    flux = CalculateFlux(valeurs[max(face2el[2*iFace],face2el[2*iFace+1])], valeurs[min(face2el[2*iFace],face2el[2*iFace+1])], normalVec[elem][facelocale]);
+    for (size_t i = 0; i < 4; i++) {
+      residu[max(face2el[2*iFace],face2el[2*iFace+1])][i] += flux[i]*deltaS[max(face2el[2*iFace],face2el[2*iFace+1])][facelocale];
+      residu[min(face2el[2*iFace],face2el[2*iFace+1])][i] -= flux[i]*deltaS[max(face2el[2*iFace],face2el[2*iFace+1])][facelocale];
+    }
+    vector<double> dWin[nElemTot];
+    dWin[elem] = CalculateW(elem, deltat[elem], volume, residu[elem]);
+    //UpdateW(elem, Win, dWin[elem], valeurs);
+    //Win[0].u = produitsBC[0].u;
+    vector<double> W_b = {0,0,0,0};
+    W_b = SuperInflow(produitsBC[min(face2el[2*iFace],face2el[2*iFace+1])]);
+
+    produitsBC[elem].rho = W_b[0];
+    produitsBC[elem].rho_u = W_b[0];
+    produitsBC[elem].rho_v = W_b[0];
+    produitsBC[elem].rho_E = W_b[0];
+
+    //produitsBC -= SuperOutflow(Win);
+  }
+}

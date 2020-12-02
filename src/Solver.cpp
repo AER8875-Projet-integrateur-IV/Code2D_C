@@ -186,17 +186,18 @@ void UpdateW(int iElem, variables_conservatrices* produits, vector<double> delta
   //mettre a jour la H et p en passant fluxconvectifs tous les champs dans flux convectifs
 }
 
-void UpdateGhostsCells(vector<double> FcBC, double volume){
+void UpdateGhostsCells(variables_conservatrices produitsBC, double dt, vector<double> Fc){
   //boucler sur les faces externes copier les valeurs des elements internes
-  // for (int iFace = 0; iFace < boundFace.size(); iFace++){
-  //   int elem = face2el[2*iFace];
-	//   double Area = face2Area[iFace];
-  //
-	// ... += FcBC[iFace].rho * volume;
-	// ... += FcBC[iFace].u * volume;
-	// ... += FcBC[iFace].v * volume;
-	// ... += FcBC[iFace].H * volume;
-	// }
+  for (int iFace = NFACE-nb_faces_externes; iFace < NFACE; iFace++){
+    int elem = max(face2el[2*iFace],face2el[2*iFace+1]);
+  	double volume = area[elem];
+    vector<double> Win;
+    vector<double> dWin = CalculateW(elem, dt, volume, Fc);
+    UpdateW(elem, Win, dWin);
+    produitsBC += SuperInflow(Win);
+    //produitsBC -= SuperOutflow(Win);
+    Win = {0,0,0,0};
+  }
 }
 
 double ComputeEnergy(double rho, double u, double v, double p, double gamma){

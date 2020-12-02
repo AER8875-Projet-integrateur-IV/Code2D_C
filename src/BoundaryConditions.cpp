@@ -93,6 +93,14 @@ void UpdateGhostsCells(FluxConvectifs *valeurs, variables_conservatrices* produi
     produitsBC[elem].rho_u = W_b[1];
     produitsBC[elem].rho_v = W_b[2];
     produitsBC[elem].rho_E = W_b[3];
+    //cette section est specifique aux conditions limites l'implementer plus tard
+    valeurs[elem].rho = valeurs[elem_interieur].rho;
+    valeurs[elem].u = valeurs[elem_interieur].u;
+    valeurs[elem].v = valeurs[elem_interieur].v;
+    produitsBC[elem].Energy = produitsBC[elem_interieur].rho_E/produitsBC[elem_interieur].rho;
+    double gamma = 1.4;
+    valeurs[elem].p = ComputePressure(valeurs[elem].rho, valeurs[elem].u, valeurs[elem].v, produitsBC[elem].Energy, gamma);
+    valeurs[elem].H = ComputeEnthalpy(valeurs[elem].rho, valeurs[elem].u, valeurs[elem].v, valeurs[elem].p, gamma );
 
   }
 }

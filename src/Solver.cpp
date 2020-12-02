@@ -32,7 +32,7 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
 
     left = valeurs[iElem_left];
     cout << "test a "<< '\n';
-    right = valeurs[iElem_right];
+    right = valeurs[iElem_right]; //cette ligne ne s'excute pas pour la face 3, element 3
     cout <<"  u left cell: "<< right.u << "  normalVecx: "<< normalVec[iElem_left][iface][0] <<'\n';
     flux = CalculateFlux(left, right, normalVec[iElem_left][iface]);
     //iteration sur les composantes de Fc pour les sommer au residu

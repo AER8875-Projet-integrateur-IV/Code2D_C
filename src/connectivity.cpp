@@ -214,7 +214,29 @@ void Connectivity(){
           fsuel[i] = faceCount;
           faceCount += 1;
       }
+
   }
+
+  for (size_t i = 0; i < NELEM; i++) {
+    for (size_t j = 0; j < 4; j++) {//remplacer 4 par nbfaces ielem
+      if (fsuel[4*i+j] > 39) {//remplacer 39 par nb faces internes
+        cout << "placer element " << i << " dans la face " << fsuel[4*i+j] << '\n';
+        face2el[2*fsuel[4*i+j]] = i;
+        //face2el[2*fsuel[4*i+j]+1] = boundary element;
+      }
+  }
+
+  }
+  // Passage dans face2element pour mettre a jour les ghost cells
+	// int countGhostcells = NELEM;
+	// for (int i = 0; i < 2*NFACE; ++i) {
+	// 	if (face2el[i] == -1) {
+	// 		face2el[i] = countGhostcells;
+	// 		countGhostcells += 1;
+	// 	}
+	// }
+
+
   nElemTot = elemCount;
   nGhostCells = nElemTot - NELEM;
 

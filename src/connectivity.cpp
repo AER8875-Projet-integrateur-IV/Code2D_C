@@ -2,6 +2,7 @@
 
 //global variables
 vector<int> face2el;
+vector<int> fsuel;
 
 void Connectivity(){
   cout << "----- Starting Connectivity Calculations -----" << endl;
@@ -107,7 +108,7 @@ void Connectivity(){
   for(int i=0;i<esuelStart.back();i++) {
       esuel.push_back(-1);
   }
-  vector<int> fsuel;
+
   for(int i=0;i<esuelStart.back();i++) {
       fsuel.push_back(-1);
   }

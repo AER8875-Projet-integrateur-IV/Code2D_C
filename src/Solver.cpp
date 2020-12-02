@@ -24,6 +24,7 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
   for (size_t iface = 0; iface < NFACE; iface++) {
     cout << "face: " << iface << '\n';
     int iElem_left = face2el[2*iface];
+    int facelocale;
 
     int iElem_right = face2el[2*iface+1];
     cout << "iElem_right: " << iElem_right << " u: " << valeurs[iElem_right].u <<'\n';
@@ -34,15 +35,17 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
     cout << "test a "<< '\n';
     right = valeurs[iElem_right]; //cette ligne ne s'excute pas pour la face 3, element 3
     //cout <<"  u left cell: "<< right.u << "  normalVecx: "<< normalVec[iElem_left][iface][0] <<'\n';
-    for (size_t i = 0; i < 4; i++) {//changer le 4 pour nbfaces elem
-      //int face =
+    for (size_t i = 0; i < 4; i++) {
+      if (fsuel[4*iElem_left+i] == iface) {
+        facelocale = i;
+      }
     }
 
-    flux = CalculateFlux(left, right, normalVec[iElem_left][iface]);
+    flux = CalculateFlux(left, right, normalVec[iElem_left][facelocale]);
     //iteration sur les composantes de Fc pour les sommer au residu
     for (size_t i = 0; i < 4; i++) {
-      residu[iElem_left][i] += flux[i]*deltaS[iElem_left][iface]; // le schema de roe multiplie-t-il deja par la normale?
-      residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][iface]; //modifier ici pour la face locale
+      residu[iElem_left][i] += flux[i]*deltaS[iElem_left][facelocale]; // le schema de roe multiplie-t-il deja par la normale?
+      residu[iElem_right][i] -= flux[i]*deltaS[iElem_left][facelocale]; //modifier ici pour la face locale
       cout << residu[iElem_left][i] << " (residu)" << '\n';
     }
 

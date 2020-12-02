@@ -85,14 +85,14 @@ double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<
   double RayonSpec;
 
 
-
+  c = pow(gammaFluid*valeurs.p/valeurs.rho,0.5);
   for (int iFace = 0; iFace < 4; iFace++){//etait cell2nodeStart[iElem]
-    SSx += normal[iFace][0];
-    SSy += normal[iFace][1];
-    c = pow(gammaFluid*valeurs.p/valeurs.rho,0.5);
+    SSx += fabs(normal[iFace][0]*volume);
+    SSy += fabs(normal[iFace][1]*volume);
+
     }
-  RayonSpecX = 0.5*(abs(valeurs.u)+c)*SSx;
-  RayonSpecY = 0.5*(abs(valeurs.v)+c)*SSy;
+  RayonSpecX = 0.5*(fabs(valeurs.u)+c)*SSx;
+  RayonSpecY = 0.5*(fabs(valeurs.v)+c)*SSy;
   RayonSpec = RayonSpecX+RayonSpecY;
   dt = CFL*volume/RayonSpec;
   return dt;

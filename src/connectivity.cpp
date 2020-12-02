@@ -21,12 +21,12 @@ void Connectivity(){
   cout << "NFACE  = " << NFACE << '\n';
 
   cout << "cell2nodeStart: " << '\n';
-  for (int i = 0; i < NELEM+1; i++){
+  for (int i = 0; i < NELEM; i++){
     cout << cell2nodeStart[i] << " ";
   }
   cout << '\n';
   cout << "cell2node: " << '\n';
-  for (int i = 0; i < NELEM+1; i++){
+  for (int i = 0; i < NELEM; i++){
     for (int j = 0; j < cell2nodeStart[i+1]-cell2nodeStart[i]; j++){
       cout << cell2node[j+cell2nodeStart[i]] << "  ";
     }

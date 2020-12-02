@@ -55,8 +55,8 @@ int main() {
 
     //iteration sur les cellules jusqu'a convergence
     double erreur = 1000;
-    double critere = 1.0e-5;
-    double nbIterMax = 2;
+    double critere = 1.0e-17;
+    double nbIterMax = 10;
     int Iter = 0;
     while (erreur > critere && Iter < nbIterMax) {
       //cout << "test" << '\n';

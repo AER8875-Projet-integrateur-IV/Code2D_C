@@ -51,7 +51,7 @@ double Solve(FluxConvectifs *valeurs, variables_conservatrices* W, double erreur
     for (size_t i = 0; i < 4; i++) {
       residu[iElem_left][i] -= flux[i]*deltaS[iElem_left][facelocale]; // le schema de roe multiplie-t-il deja par la normale?
       residu[iElem_right][i] += flux[i]*deltaS[iElem_left][facelocale]; //modifier ici pour la face locale
-      cout << residu[iElem_left][i] << " (residu)" << '\n';
+      //cout << residu[iElem_left][i] << " (residu)" << '\n';
     }
 
   }

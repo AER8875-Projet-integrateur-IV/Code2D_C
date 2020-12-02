@@ -92,7 +92,7 @@ void MeshReader () {
         break;
       }
 
-      NFACE = cell2nodeStart[NELEM];
+
 
       // Store each node in the right line and in the right order in the cell2node vector
       ss_2 >> word_2;
@@ -107,7 +107,7 @@ void MeshReader () {
 
 
     }
-
+    NFACE = cell2nodeStart[NELEM-1];
 
     getline(myfile,line); //lit une premiere ligne
     while (line[0] == '%') //skippe les lignes en commentaires
@@ -121,7 +121,8 @@ void MeshReader () {
 
 
 
-    coord.reserve(NPOIN);
+    coord = vector<vector<double>>(NPOIN); 
+
     for (int i = 0; i<NPOIN; i++)
     {
       // Find the number of nodes for one element using the su2 convention for the number of nodes

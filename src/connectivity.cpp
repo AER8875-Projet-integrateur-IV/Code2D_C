@@ -121,7 +121,13 @@ void Connectivity(){
   int faceCount = 0;
 
   int lhelp [2];
+  for (size_t i = 0; i < 2; i++) {
+    lhelp[i] = 0;
+  }
   int lpoint [NPOIN];
+  for (size_t i = 0; i < NPOIN; i++) {
+    lpoint[i] = 0;
+  }
 
   for (int elementI=0; elementI<NELEM; elementI++) {
       startI = cell2nodeStart[elementI];
@@ -238,14 +244,14 @@ void Connectivity(){
       int iElem = face2el[2*i];
       int voisin = esuelStart[iElem];
       int trigger[4] = {0,0,0,0};
-      int count = 0;
+      int count2 = 0;
       for (size_t j = 0; j < 4; j++) {//esuelStart[iElem+1]-esuelStart[iElem]
         if (esuel[esuelStart[iElem]+j] > NELEM-1) {
-          trigger[count] +=j;
-          count +=1;
+          trigger[count2] +=j;
+          count2 +=1;
         }
       }
-      for (size_t k = 0; k < count; k++) {
+      for (size_t k = 0; k < count2; k++) {
         cout << "placer element " << esuel[esuelStart[iElem]+trigger[k]] << " dans la face " << i+k << '\n';
         face2el[2*(i+k)+1] = esuel[esuelStart[iElem]+trigger[k]];
         nb_faces_externes +=1;

@@ -4,6 +4,7 @@
 vector<int> face2el;
 vector<int> fsuel;
 int nb_faces_externes = 0;
+int nElemTot;
 
 void Connectivity(){
   cout << "----- Starting Connectivity Calculations -----" << endl;
@@ -204,7 +205,7 @@ void Connectivity(){
   // Parcours de esuel pour calculer le nombre d'elements au total
   int elemCount = NELEM;
   //faceCount = NFACE;
-  int nElemTot;
+
   int nGhostCells;
 
   for (int i = 0; i < esuelStart[NELEM]; ++i) {

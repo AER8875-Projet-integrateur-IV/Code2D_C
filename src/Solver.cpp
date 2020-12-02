@@ -12,7 +12,7 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
   // appel des fonctions definies plus bas pour resoudre
   double deltat[NELEM];
   vector<double> v(4);
-  vector<vector<double> > residu(NELEM,v);
+  vector<vector<double> > residu(nElemTot,v);
   vector<double> deltaW[NELEM];
   vector<double> flux = {0,0,0,0};
   FluxConvectifs left;
@@ -32,7 +32,6 @@ void Solve(FluxConvectifs *valeurs, variables_conservatrices* W){
     //calcul des flux convectifs avec roe pour la face iface
 
     left = valeurs[iElem_left];
-    cout << "test a "<< '\n';
     right = valeurs[iElem_right]; //cette ligne ne s'excute pas pour la face 3, element 3
     //cout <<"  u left cell: "<< right.u << "  normalVecx: "<< normalVec[iElem_left][iface][0] <<'\n';
     for (size_t i = 0; i < 4; i++) {
@@ -75,7 +74,9 @@ double CalculateDeltat(int iElem, FluxConvectifs valeurs, double volume, vector<
   double RayonSpecY;
   double RayonSpec;
 
-  for (int iFace = 0; iFace < cell2nodeStart[iElem]; iFace++){
+
+
+  for (int iFace = 0; iFace < 4; iFace++){//etait cell2nodeStart[iElem]
     SSx += normal[iFace][0];
     SSy += normal[iFace][1];
     c = pow(gammaFluid*valeurs.p/valeurs.rho,0.5);
@@ -160,7 +161,7 @@ vector<double> CalculateFlux(FluxConvectifs left, FluxConvectifs right, vector<d
 
 vector<double> CalculateW(int iElem, double dt, double volume, vector<double> Fc){
   // Calcul de delta W
-  double deltaW[4];
+  double deltaW[4] = {0,0,0,0};
   deltaW[iElem] = -dt * Fc[0] / volume;
   deltaW[iElem] = -dt * Fc[1] / volume;
   deltaW[iElem] = -dt * Fc[2] / volume;
